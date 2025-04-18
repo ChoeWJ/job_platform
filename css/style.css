@@ -1128,3 +1128,16 @@ footer {
     flex-wrap: wrap;
     gap: 20px;
 }
+
+.favorite-btn {
+    padding: 8px 12px;
+    background: #e84393;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.favorite-btn:hover {
+    background: #c0392b;
+}

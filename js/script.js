@@ -117,6 +117,7 @@ function displayJobs(category) {
                 <p>연봉: ${job.salary}</p>
                 <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
                 <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
+                <button onclick="addFavoriteJob(${job.id})" class="favorite-btn">즐겨찾기</button>
             `;
             jobsContainer.appendChild(jobDiv);
         });
@@ -852,6 +853,7 @@ function displayAnalytics() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    console.info('Netlify 배포 환경 시작:', window.location.href);
     initializeAdminAccount(); // 관리자 계정 초기화
     await loadJobs(); // 비동기 데이터 로드
 
@@ -929,5 +931,14 @@ function handleError(message, elementId) {
     const element = document.getElementById(elementId);
     if (element) {
         element.innerHTML = `<p>${message}</p>`;
+    }
+}
+
+function addFavoriteJob(jobId) {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    if (!favorites.includes(jobId)) {
+        favorites.push(jobId);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('즐겨찾기에 추가되었습니다.');
     }
 }

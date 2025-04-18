@@ -1,0 +1,9 @@
+# netlify.toml
+[build]
+  publish = "."
+  command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "/main.html"
+  status = 200
