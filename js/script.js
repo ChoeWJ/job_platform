@@ -49,67 +49,23 @@ function trackPageView(page) {
     localStorage.setItem('pageViews', JSON.stringify(pvData));
 }
 
-// Search function
+// searchJobs 수정
 function searchJobs(query, targetElement) {
-    if (!targetElement) {
-        console.error('검색 대상 요소를 찾을 수 없습니다.');
-        return;
-    }
-    const filteredJobs = jobs.filter(job => 
-        job.title.toLowerCase().includes(query.toLowerCase()) ||
-        job.company.toLowerCase().includes(query.toLowerCase())
-    );
-    targetElement.innerHTML = '';
-    if (filteredJobs.length === 0) {
-        targetElement.innerHTML = '<p>검색 결과가 없습니다.</p>';
-        return;
-    }
-    filteredJobs.forEach(job => {
-        const jobDiv = document.createElement('div');
-        jobDiv.className = 'job-card';
-        jobDiv.innerHTML = `
-            <h3>${job.title} - ${job.company}</h3>
-            <p>연봉: ${job.salary}</p>
-            <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
-            <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
-        `;
-        targetElement.appendChild(jobDiv);
-    });
-}
-
-// displayJobs 함수 (기존 유지, 호출 보장)
-function displayJobs(category) {
-    const jobListings = document.getElementById('job-listings');
-    if (!jobListings) {
-        console.error('job-listings 요소를 찾을 수 없습니다.');
-        return;
-    }
-    
-    jobListings.innerHTML = '';
-    if (!jobs || jobs.length === 0) {
-        jobListings.innerHTML = '<p>공고 데이터를 로드할 수 없습니다.</p>';
-        console.error('jobs 데이터가 비어 있습니다.');
-        return;
-    }
-    
-    const categories = category && category !== 'all' 
-        ? [category]
-        : [...new Set(jobs.map(job => job.category))];
-    
-    categories.forEach(cat => {
-        const section = document.createElement('section');
-        section.className = 'category-section';
-        section.innerHTML = `<h2>${cat}</h2><div id="jobs-${cat.replace(/\s/g, '-')}" class="category-jobs"></div>`;
-        jobListings.appendChild(section);
-        
-        const categoryJobs = jobs.filter(job => job.category === cat);
-        const jobsContainer = document.getElementById(`jobs-${cat.replace(/\s/g, '-')}`);
-        if (categoryJobs.length === 0) {
-            jobsContainer.innerHTML = '<p>해당 직군에 공고가 없습니다.</p>';
+    return restrictToLoggedIn(() => {
+        if (!targetElement) {
+            console.error('검색 대상 요소를 찾을 수 없습니다.');
             return;
         }
-        
-        categoryJobs.forEach(job => {
+        const filteredJobs = jobs.filter(job =>
+            job.title.toLowerCase().includes(query.toLowerCase()) ||
+            job.company.toLowerCase().includes(query.toLowerCase())
+        );
+        targetElement.innerHTML = '';
+        if (filteredJobs.length === 0) {
+            targetElement.innerHTML = '<p>검색 결과가 없습니다.</p>';
+            return;
+        }
+        filteredJobs.forEach(job => {
             const jobDiv = document.createElement('div');
             jobDiv.className = 'job-card';
             jobDiv.innerHTML = `
@@ -117,110 +73,183 @@ function displayJobs(category) {
                 <p>연봉: ${job.salary}</p>
                 <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
                 <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
-                <button onclick="addFavoriteJob(${job.id})" class="favorite-btn">즐겨찾기</button>
             `;
-            jobsContainer.appendChild(jobDiv);
+            targetElement.appendChild(jobDiv);
         });
-    });
+    }, false); // 검색은 리디렉션 없이 제한
 }
 
-// displayJobDetail 오류 처리 강화
-function displayJobDetail() {
-    const jobDetail = document.getElementById('job-detail');
-    if (!jobDetail) {
-        console.error('job-detail 요소를 찾을 수 없습니다.');
-        return;
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const jobId = parseInt(urlParams.get('id'), 10);
-    if (!jobId || isNaN(jobId)) {
-        jobDetail.innerHTML = '<p>유효하지 않은 직무 ID입니다.</p>';
-        console.error('유효하지 않은 jobId:', jobId);
-        return;
-    }
-
-    const job = jobs.find(j => j && j.id === jobId);
-    if (!job) {
-        jobDetail.innerHTML = '<p>직무를 찾을 수 없습니다. 올바른 ID를 확인하세요.</p>';
-        console.error(`ID ${jobId}에 해당하는 직무를 찾을 수 없습니다.`);
-        return;
-    }
-
-    try {
-        const companyImage = document.getElementById('company-image');
-        const detailTitle = document.getElementById('detail-title');
-        const detailCompany = document.getElementById('detail-company');
-        const detailSalary = document.getElementById('detail-salary');
-        const detailRemote = document.getElementById('detail-remote');
-        const detailDescription = document.getElementById('detail-description');
-        const detailExperience = document.getElementById('detail-experience');
-        const detailRequirements = document.getElementById('detail-requirements');
-        const applyButton = document.querySelector('.apply-button');
-
-        if (!companyImage || !detailTitle || !detailCompany || !detailSalary || 
-            !detailRemote || !detailDescription || !detailExperience || !detailRequirements) {
-            throw new Error('직무 상세 페이지의 필수 요소가 누락되었습니다.');
+// displayJobs 수정
+function displayJobs(category) {
+    return restrictToLoggedIn(() => {
+        const jobListings = document.getElementById('job-listings');
+        if (!jobListings) {
+            console.error('job-listings 요소를 찾을 수 없습니다.');
+            return;
         }
 
-        companyImage.style.backgroundImage = `url(${job.image || 'https://via.placeholder.com/1350x200'})`;
-        detailTitle.textContent = `${job.title || '제목 없음'} - ${job.company || '회사명 없음'}`;
-        detailCompany.textContent = `회사: ${job.company || '정보 없음'}`;
-        detailSalary.textContent = `연봉: ${job.salary || '정보 없음'}`;
-        detailRemote.textContent = `원격 근무: ${job.remote ? '가능' : '불가능'}`;
-        detailDescription.textContent = job.description || '설명 없음';
-        detailExperience.textContent = job.experience || '요건 없음';
-        detailRequirements.innerHTML = '';
-        (job.requirements || []).forEach(req => {
-            const li = document.createElement('li');
-            li.textContent = req || '요구사항 없음';
-            detailRequirements.appendChild(li);
-        });
+        jobListings.innerHTML = '';
+        if (!jobs || jobs.length === 0) {
+            handleError('공고 데이터를 로드할 수 없습니다.', 'job-listings');
+            return;
+        }
 
-        if (applyButton) {
-            applyButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (!checkLogin()) {
-                    alert('지원을 위해 로그인이 필요합니다.');
-                    window.location.href = 'login.html';
-                    return;
-                }
-                alert('지원이 완료되었습니다.');
+        const categories = category && category !== 'all'
+            ? [category]
+            : [...new Set(jobs.map(job => job.category))];
+
+        categories.forEach(cat => {
+            const section = document.createElement('section');
+            section.className = 'category-section';
+            section.innerHTML = `<h2>${cat}</h2><div id="jobs-${cat.replace(/\s/g, '-')}" class="category-jobs"></div>`;
+            jobListings.appendChild(section);
+
+            const categoryJobs = jobs.filter(job => job.category === cat);
+            const jobsContainer = document.getElementById(`jobs-${cat.replace(/\s/g, '-')}`);
+            if (categoryJobs.length === 0) {
+                jobsContainer.innerHTML = '<p>해당 직군에 공고가 없습니다.</p>';
+                return;
+            }
+
+            categoryJobs.forEach(job => {
+                const jobDiv = document.createElement('div');
+                jobDiv.className = 'job-card';
+                jobDiv.innerHTML = `
+                    <h3>${job.title} - ${job.company}</h3>
+                    <p>연봉: ${job.salary}</p>
+                    <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
+                    <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
+                `;
+                jobsContainer.appendChild(jobDiv);
             });
-        }
-
-        trackClick(job.category || '알 수 없음');
-    } catch (error) {
-        console.error('직무 데이터 렌더링 중 오류 발생:', error);
-        jobDetail.innerHTML = '<p>데이터를 표시하는 데 문제가 발생했습니다.</p>';
-    }
+        });
+    });
 }
 
-// Function to display recommendations
-function displayRecommendations(category) {
-    if (!recommendations || !recommendationList) {
-        console.error('recommendations 또는 recommendation-list 요소를 찾을 수 없습니다.');
-        return;
-    }
-
-    recommendationList.innerHTML = '';
-    const recommendedCategories = recommendationMap[category] || recommendationMap['all'] || [];
-    let recJobs = [];
-    recommendedCategories.forEach(recCat => {
-        const catJobs = jobs.filter(job => job.category === recCat);
-        recJobs = recJobs.concat(catJobs);
+// addFavoriteJob 정의 (누락 시 추가)
+function addFavoriteJob(jobId) {
+    return restrictToLoggedIn(() => {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const user = users.find(u => u.email === currentUser.email);
+        if (!user) {
+            console.error('현재 사용자를 찾을 수 없습니다.');
+            return;
+        }
+        user.favorites = user.favorites || [];
+        if (!user.favorites.includes(jobId)) {
+            user.favorites.push(jobId);
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('즐겨찾기에 추가되었습니다.');
+        } else {
+            alert('이미 즐겨찾기에 추가된 공고입니다.');
+        }
     });
-    recJobs = recJobs.sort(() => 0.5 - Math.random()).slice(0, 3);
+}
 
-    if (recJobs.length > 0) {
-        recJobs.forEach(job => {
-            const recDiv = document.createElement('div');
-            recDiv.innerHTML = `<p><a href="job-detail.html?id=${job.id}">${job.title} - ${job.company}</a></p>`;
-            recommendationList.appendChild(recDiv);
+// displayJobDetail 수정 (즐겨찾기 버튼 추가)
+function displayJobDetail() {
+    return restrictToLoggedIn(() => {
+        const jobDetail = document.getElementById('job-detail');
+        if (!jobDetail) {
+            console.error('job-detail 요소를 찾을 수 없습니다.');
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobId = parseInt(urlParams.get('id'), 10);
+        if (!jobId || isNaN(jobId)) {
+            jobDetail.innerHTML = '<p>유효하지 않은 직무 ID입니다.</p>';
+            console.error('유효하지 않은 jobId:', jobId);
+            return;
+        }
+
+        const job = jobs.find(j => j && j.id === jobId);
+        if (!job) {
+            jobDetail.innerHTML = '<p>직무를 찾을 수 없습니다. 올바른 ID를 확인하세요.</p>';
+            console.error(`ID ${jobId}에 해당하는 직무를 찾을 수 없습니다.`);
+            return;
+        }
+
+        try {
+            const companyImage = document.getElementById('company-image');
+            const detailTitle = document.getElementById('detail-title');
+            const detailCompany = document.getElementById('detail-company');
+            const detailSalary = document.getElementById('detail-salary');
+            const detailRemote = document.getElementById('detail-remote');
+            const detailDescription = document.getElementById('detail-description');
+            const detailExperience = document.getElementById('detail-experience');
+            const detailRequirements = document.getElementById('detail-requirements');
+            const applyButton = document.querySelector('.apply-button');
+            const favoriteButton = document.querySelector('.favorite-button'); // 즐겨찾기 버튼
+
+            if (!companyImage || !detailTitle || !detailCompany || !detailSalary || 
+                !detailRemote || !detailDescription || !detailExperience || !detailRequirements) {
+                throw new Error('직무 상세 페이지의 필수 요소가 누락되었습니다.');
+            }
+
+            companyImage.style.backgroundImage = `url(${job.image || 'https://via.placeholder.com/1350x200'})`;
+            detailTitle.textContent = `${job.title || '제목 없음'} - ${job.company || '회사명 없음'}`;
+            detailCompany.textContent = `회사: ${job.company || '정보 없음'}`;
+            detailSalary.textContent = `연봉: ${job.salary || '정보 없음'}`;
+            detailRemote.textContent = `원격 근무: ${job.remote ? '가능' : '불가능'}`;
+            detailDescription.textContent = job.description || '설명 없음';
+            detailExperience.textContent = job.experience || '요건 없음';
+            detailRequirements.innerHTML = '';
+            (job.requirements || []).forEach(req => {
+                const li = document.createElement('li');
+                li.textContent = req || '요구사항 없음';
+                detailRequirements.appendChild(li);
+            });
+
+            if (applyButton) {
+                applyButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('지원이 완료되었습니다.');
+                });
+            }
+
+            if (favoriteButton) {
+                favoriteButton.addEventListener('click', () => {
+                    addFavoriteJob(jobId); // addFavoriteJob 호출
+                });
+            }
+
+            trackClick(job.category || '알 수 없음');
+        } catch (error) {
+            console.error('직무 데이터 렌더링 중 오류 발생:', error);
+            jobDetail.innerHTML = '<p>데이터를 표시하는 데 문제가 발생했습니다.</p>';
+        }
+    });
+}
+
+// displayRecommendations 수정
+function displayRecommendations(category) {
+    return restrictToLoggedIn(() => {
+        if (!recommendations || !recommendationList) {
+            console.error('recommendations 또는 recommendation-list 요소를 찾을 수 없습니다.');
+            return;
+        }
+
+        recommendationList.innerHTML = '';
+        // getTopClickedCategories 사용
+        const recommendedCategories = getTopClickedCategories(3); // 상위 3개 직군
+        let recJobs = [];
+        recommendedCategories.forEach(recCat => {
+            const catJobs = jobs.filter(job => job.category === recCat);
+            recJobs = recJobs.concat(catJobs);
         });
-    } else {
-        recommendationList.innerHTML = '<p>추천 공고가 없습니다.</p>';
-    }
+        recJobs = recJobs.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+        if (recJobs.length > 0) {
+            recJobs.forEach(job => {
+                const recDiv = document.createElement('div');
+                recDiv.innerHTML = `<p><a href="job-detail.html?id=${job.id}">${job.title} - ${job.company}</a></p>`;
+                recommendationList.appendChild(recDiv);
+            });
+        } else {
+            recommendationList.innerHTML = '<p>추천 공고가 없습니다.</p>';
+        }
+    });
 }
 
 // Function to show notification
@@ -376,96 +405,110 @@ function getTopClickedCategories(n) {
 
 
 
-// Handle advanced search
+// handleAdvancedSearch 수정
 function handleAdvancedSearch(targetElement) {
-    const advancedSearchModal = document.getElementById('advanced-search-modal');
-    const advancedSearchForm = document.getElementById('advanced-search-form');
-    const advancedSearchBtn = document.getElementById(
-        targetElement === document.getElementById('recommended-job-list') 
-            ? 'advanced-search-btn-main' 
-            : 'advanced-search-btn'
-    );
-    const closeAdvancedSearch = document.querySelector('.close-advanced-search');
+    return restrictToLoggedIn(() => {
+        const advancedSearchModal = document.getElementById('advanced-search-modal');
+        const advancedSearchForm = document.getElementById('advanced-search-form');
+        const advancedSearchBtn = document.getElementById(
+            targetElement === document.getElementById('recommended-job-list')
+                ? 'advanced-search-btn-main'
+                : 'advanced-search-btn'
+        );
+        const closeAdvancedSearch = document.querySelector('.close-advanced-search');
 
-    if (!advancedSearchModal || !advancedSearchBtn) {
-        console.error('상세 검색 모달 또는 버튼을 찾을 수 없습니다.');
-        return;
-    }
-
-    advancedSearchBtn.removeEventListener('click', openModalHandler);
-    advancedSearchBtn.addEventListener('click', openModalHandler);
-    function openModalHandler() {
-        if (advancedSearchModal) {
-            advancedSearchModal.classList.add('show');
+        if (!advancedSearchModal || !advancedSearchBtn) {
+            console.error('상세 검색 모달 또는 버튼을 찾을 수 없습니다.');
+            return;
         }
-    }
 
-    if (closeAdvancedSearch) {
-        closeAdvancedSearch.removeEventListener('click', closeModalHandler);
-        closeAdvancedSearch.addEventListener('click', closeModalHandler);
-        function closeModalHandler() {
-            advancedSearchModal.classList.remove('show');
+        advancedSearchBtn.removeEventListener('click', openModalHandler);
+        advancedSearchBtn.addEventListener('click', openModalHandler);
+        function openModalHandler() {
+            if (advancedSearchModal) {
+                advancedSearchModal.classList.add('show');
+            }
         }
-    }
 
-    if (advancedSearchForm) {
-        advancedSearchForm.removeEventListener('submit', submitHandler);
-        advancedSearchForm.addEventListener('submit', submitHandler);
-        function submitHandler(e) {
-            e.preventDefault();
-            const salaryDisclosed = document.getElementById('salary-disclosed')?.checked;
-            const salaryMin = Math.max(0, parseInt(document.getElementById('salary-min')?.value) || 0);
-            const salaryMax = parseInt(document.getElementById('salary-max')?.value) || Infinity;
-            const remote = document.getElementById('remote-filter')?.value;
-            const category = document.getElementById('category-filter')?.value;
-
-            const filteredJobs = jobs.filter(job => {
-                const salary = parseInt(job.salary.replace(/[^0-9]/g, '') || '0');
-                const matchesSalary = (!salaryDisclosed || job.salary !== '0') &&
-                    (salary >= salaryMin) &&
-                    (salary <= salaryMax);
-                const matchesRemote = remote === 'all' || 
-                    (remote === 'true' && job.remote) || 
-                    (remote === 'false' && !job.remote);
-                const matchesCategory = category === 'all' || job.category === category;
-                return matchesSalary && matchesRemote && matchesCategory;
-            });
-
-            targetElement.innerHTML = '';
-            filteredJobs.forEach(job => {
-                const jobDiv = document.createElement('div');
-                jobDiv.className = 'job-card';
-                jobDiv.innerHTML = `
-                    <h3>${job.title} - ${job.company}</h3>
-                    <p>연봉: ${job.salary}</p>
-                    <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
-                    <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
-                `;
-                targetElement.appendChild(jobDiv);
-            });
-
-            advancedSearchModal.classList.remove('show');
-            setTimeout(showRecommendedJob, 5000);
+        if (closeAdvancedSearch) {
+            closeAdvancedSearch.removeEventListener('click', closeModalHandler);
+            closeAdvancedSearch.addEventListener('click', closeModalHandler);
+            function closeModalHandler() {
+                advancedSearchModal.classList.remove('show');
+            }
         }
-    }
 
-    // Close modal on outside click
-    advancedSearchModal.addEventListener('click', (event) => {
-        if (event.target === advancedSearchModal) {
-            advancedSearchModal.classList.remove('show');
+        if (advancedSearchForm) {
+            advancedSearchForm.removeEventListener('submit', submitHandler);
+            advancedSearchForm.addEventListener('submit', submitHandler);
+            function submitHandler(e) {
+                e.preventDefault();
+                const salaryDisclosed = document.getElementById('salary-disclosed')?.checked;
+                const salaryMin = Math.max(0, parseInt(document.getElementById('salary-min')?.value) || 0);
+                const salaryMax = parseInt(document.getElementById('salary-max')?.value) || Infinity;
+                const remote = document.getElementById('remote-filter')?.value;
+                const category = document.getElementById('category-filter')?.value;
+
+                const filteredJobs = jobs.filter(job => {
+                    const salary = parseInt(job.salary.replace(/[^0-9]/g, '') || '0');
+                    const matchesSalary = (!salaryDisclosed || job.salary !== '0') &&
+                        (salary >= salaryMin) &&
+                        (salary <= salaryMax);
+                    const matchesRemote = remote === 'all' ||
+                        (remote === 'true' && job.remote) ||
+                        (remote === 'false' && !job.remote);
+                    const matchesCategory = category === 'all' || job.category === category;
+                    return matchesSalary && matchesRemote && matchesCategory;
+                });
+
+                targetElement.innerHTML = '';
+                filteredJobs.forEach(job => {
+                    const jobDiv = document.createElement('div');
+                    jobDiv.className = 'job-card';
+                    jobDiv.innerHTML = `
+                        <h3>${job.title} - ${job.company}</h3>
+                        <p>연봉: ${job.salary}</p>
+                        <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
+                        <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
+                    `;
+                    targetElement.appendChild(jobDiv);
+                });
+
+                advancedSearchModal.classList.remove('show');
+                setTimeout(showRecommendedJob, 5000);
+            }
         }
-    });
+
+        advancedSearchModal.addEventListener('click', (event) => {
+            if (event.target === advancedSearchModal) {
+                advancedSearchModal.classList.remove('show');
+            }
+        });
+    }, false); // 상세 검색은 리디렉션 없이 제한
 }
 
 // 사용자 데이터 저장
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 
-// 로그인 상태 확인
+// checkLogin 함수 강화
 function checkLogin() {
-    return !!JSON.parse(localStorage.getItem('currentUser'));
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    return !!user;
 }
 
-// renderNavigation 함수 수정
+// 모든 기능 호출 전 로그인 확인 헬퍼
+function restrictToLoggedIn(callback, redirect = true) {
+    if (!checkLogin()) {
+        if (redirect) {
+            alert('로그인이 필요합니다.');
+            window.location.href = 'login.html';
+        }
+        return false;
+    }
+    return callback();
+}
+
+// renderNavigation 수정 (비로그인 시 제한 UI)
 function renderNavigation() {
     const navRight = document.querySelector('.nav-right');
     if (!navRight) {
@@ -473,7 +516,6 @@ function renderNavigation() {
         return;
     }
 
-    // 기존 버튼 제거
     const existingContainer = document.getElementById('auth-button-container');
     if (existingContainer) {
         existingContainer.remove();
@@ -509,7 +551,7 @@ function renderNavigation() {
         signupBtn.className = 'detail-button';
         signupBtn.textContent = '회원가입';
         signupBtn.addEventListener('click', () => {
-            window.location.href = 'signup.html'; // signup.html로 이동 확인
+            window.location.href = 'signup.html';
         });
         authButtonContainer.appendChild(signupBtn);
     }
@@ -607,107 +649,103 @@ function handleSignup(email, password, confirmPassword, agreeTerms) {
     return { success: true, message: '회원가입 성공! 로그인해 주세요.' };
 }
 
-// 프로필 관리 (handleProfile 수정)
+// handleProfile 수정
 function handleProfile() {
-    if (!checkLogin()) {
-        alert('로그인이 필요합니다.');
-        window.location.href = 'main.html';
-        return;
-    }
+    return restrictToLoggedIn(() => {
+        const preferredCategory = document.getElementById('preferred-category');
+        const savePreferred = document.getElementById('save-preferred');
+        const recentJobs = document.getElementById('recent-jobs');
+        const resumeForm = document.getElementById('resume-form');
+        const resumeDisplay = document.getElementById('resume-display');
 
-    const preferredCategory = document.getElementById('preferred-category');
-    const savePreferred = document.getElementById('save-preferred');
-    const recentJobs = document.getElementById('recent-jobs');
-    const resumeForm = document.getElementById('resume-form');
-    const resumeDisplay = document.getElementById('resume-display');
-
-    if (preferredCategory && savePreferred) {
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const user = users.find(u => u.email === currentUser.email);
-        if (user && user.preferredCategory) {
-            preferredCategory.value = user.preferredCategory;
-        }
-        savePreferred.addEventListener('click', () => {
-            if (preferredCategory.value) {
-                user.preferredCategory = preferredCategory.value;
-                localStorage.setItem('users', JSON.stringify(users));
-                alert('선호 직군이 저장되었습니다.');
-                displayMainRecommendedJobs();
+        if (preferredCategory && savePreferred) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === currentUser.email);
+            if (user && user.preferredCategory) {
+                preferredCategory.value = user.preferredCategory;
             }
-        });
-    }
+            savePreferred.addEventListener('click', () => {
+                if (preferredCategory.value) {
+                    user.preferredCategory = preferredCategory.value;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    alert('선호 직군이 저장되었습니다.');
+                    displayMainRecommendedJobs();
+                }
+            });
+        }
 
-    if (recentJobs) {
-        recentJobs.innerHTML = '';
-        const clickData = JSON.parse(localStorage.getItem('jobClicksDetailed')) || [];
-        const recentJobIds = [...new Set(clickData.map(click => click.jobId))].slice(0, 5);
-        recentJobIds.forEach(jobId => {
-            const job = jobs.find(j => j.id === jobId);
-            if (job) {
-                const jobDiv = document.createElement('div');
-                jobDiv.className = 'job-card';
-                jobDiv.innerHTML = `
-                    <h3>${job.title} - ${job.company}</h3>
-                    <p>연봉: ${job.salary}</p>
-                    <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
-                    <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
+        if (recentJobs) {
+            recentJobs.innerHTML = '';
+            const clickData = JSON.parse(localStorage.getItem('jobClicksDetailed')) || [];
+            const recentJobIds = [...new Set(clickData.map(click => click.jobId))].slice(0, 5);
+            recentJobIds.forEach(jobId => {
+                const job = jobs.find(j => j.id === jobId);
+                if (job) {
+                    const jobDiv = document.createElement('div');
+                    jobDiv.className = 'job-card';
+                    jobDiv.innerHTML = `
+                        <h3>${job.title} - ${job.company}</h3>
+                        <p>연봉: ${job.salary}</p>
+                        <p>원격 근무: ${job.remote ? '가능' : '불가능'}</p>
+                        <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
+                    `;
+                    recentJobs.appendChild(jobDiv);
+                }
+            });
+        }
+
+        if (resumeForm && resumeDisplay) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === currentUser.email);
+            if (user && user.resume) {
+                resumeDisplay.innerHTML = `
+                    <h4>저장된 이력서</h4>
+                    <p><strong>이름:</strong> ${user.resume.name}</p>
+                    <p><strong>이메일:</strong> ${user.resume.email}</p>
+                    <p><strong>경력:</strong> ${user.resume.experience || '없음'}</p>
+                    <p><strong>기술 및 자격:</strong> ${user.resume.skills || '없음'}</p>
+                    <button id="delete-resume">이력서 삭제</button>
                 `;
-                recentJobs.appendChild(jobDiv);
+                const deleteResume = document.getElementById('delete-resume');
+                if (deleteResume) {
+                    deleteResume.addEventListener('click', () => {
+                        user.resume = null;
+                        localStorage.setItem('users', JSON.stringify(users));
+                        resumeDisplay.innerHTML = '<p>이력서가 삭제되었습니다.</p>';
+                    });
+                }
             }
-        });
-    }
-
-    if (resumeForm && resumeDisplay) {
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const user = users.find(u => u.email === currentUser.email);
-        if (user && user.resume) {
-            resumeDisplay.innerHTML = `
-                <h4>저장된 이력서</h4>
-                <p><strong>이름:</strong> ${user.resume.name}</p>
-                <p><strong>이메일:</strong> ${user.resume.email}</p>
-                <p><strong>경력:</strong> ${user.resume.experience || '없음'}</p>
-                <p><strong>기술 및 자격:</strong> ${user.resume.skills || '없음'}</p>
-                <button id="delete-resume">이력서 삭제</button>
-            `;
-            const deleteResume = document.getElementById('delete-resume');
-            if (deleteResume) {
-                deleteResume.addEventListener('click', () => {
-                    user.resume = null;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    resumeDisplay.innerHTML = '<p>이력서가 삭제되었습니다.</p>';
-                });
-            }
+            resumeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const resumeData = {
+                    name: document.getElementById('resume-name').value,
+                    email: document.getElementById('resume-email').value,
+                    experience: document.getElementById('resume-experience').value,
+                    skills: document.getElementById('resume-skills').value
+                };
+                user.resume = resumeData;
+                localStorage.setItem('users', JSON.stringify(users));
+                resumeDisplay.innerHTML = `
+                    <h4>저장된 이력서</h4>
+                    <p><strong>이름:</strong> ${resumeData.name}</p>
+                    <p><strong>이메일:</strong> ${resumeData.email}</p>
+                    <p><strong>경력:</strong> ${resumeData.experience || '없음'}</p>
+                    <p><strong>기술 및 자격:</strong> ${resumeData.skills || '없음'}</p>
+                    <button id="delete-resume">이력서 삭제</button>
+                `;
+                resumeForm.reset();
+                alert('이력서가 저장되었습니다.');
+                const deleteResume = document.getElementById('delete-resume');
+                if (deleteResume) {
+                    deleteResume.addEventListener('click', () => {
+                        user.resume = null;
+                        localStorage.setItem('users', JSON.stringify(users));
+                        resumeDisplay.innerHTML = '<p>이력서가 삭제되었습니다.</p>';
+                    });
+                }
+            });
         }
-        resumeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const resumeData = {
-                name: document.getElementById('resume-name').value,
-                email: document.getElementById('resume-email').value,
-                experience: document.getElementById('resume-experience').value,
-                skills: document.getElementById('resume-skills').value
-            };
-            user.resume = resumeData;
-            localStorage.setItem('users', JSON.stringify(users));
-            resumeDisplay.innerHTML = `
-                <h4>저장된 이력서</h4>
-                <p><strong>이름:</strong> ${resumeData.name}</p>
-                <p><strong>이메일:</strong> ${resumeData.email}</p>
-                <p><strong>경력:</strong> ${resumeData.experience || '없음'}</p>
-                <p><strong>기술 및 자격:</strong> ${resumeData.skills || '없음'}</p>
-                <button id="delete-resume">이력서 삭제</button>
-            `;
-            resumeForm.reset();
-            alert('이력서가 저장되었습니다.');
-            const deleteResume = document.getElementById('delete-resume');
-            if (deleteResume) {
-                deleteResume.addEventListener('click', () => {
-                    user.resume = null;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    resumeDisplay.innerHTML = '<p>이력서가 삭제되었습니다.</p>';
-                });
-            }
-        });
-    }
+    });
 }
 
 // 관리자 계정 초기화
@@ -852,79 +890,6 @@ function displayAnalytics() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    console.info('Netlify 배포 환경 시작:', window.location.href);
-    initializeAdminAccount(); // 관리자 계정 초기화
-    await loadJobs(); // 비동기 데이터 로드
-
-    if (!jobs || jobs.length === 0) {
-        handleError('공고 데이터를 로드할 수 없습니다.', 'job-detail');
-        handleError('공고 데이터를 로드할 수 없습니다.', 'job-listings');
-        return;
-    }
-
-    renderNavigation(); // 네비게이션 렌더링
-
-    if (categorySelect) {
-        categorySelect.innerHTML = `
-            <option value="all">전체 직군</option>
-            ${[...new Set(jobs.map(job => job.category))].map(cat => `<option value="${cat}">${cat}</option>`).join('')}
-        `;
-        categorySelect.removeEventListener('change', handleCategoryChange);
-        categorySelect.addEventListener('change', handleCategoryChange);
-        function handleCategoryChange(e) {
-            const selectedCategory = e.target.value;
-            displayJobs(selectedCategory);
-            displayRecommendations(selectedCategory);
-            setTimeout(showNotification, 5000);
-        }
-        displayJobs('all'); // 초기 호출
-    }
-
-    if (document.getElementById('recommended-job-list')) {
-        trackPageView('Main Page');
-        displayMainRecommendedJobs();
-        handleAdvancedSearch(document.getElementById('recommended-job-list'));
-        const searchInputMain = document.getElementById('search-input-main');
-        if (searchInputMain) {
-            searchInputMain.addEventListener('input', (e) => {
-                searchJobs(e.target.value, document.getElementById('recommended-job-list'));
-                setTimeout(showRecommendedJob, 5000);
-            });
-        }
-        setTimeout(showRecommendedJob, 5000);
-    } else if (document.getElementById('job-listings')) {
-        trackPageView('Job Listings');
-        displayJobs('all');
-        displayRecommendations('all');
-        handleAdvancedSearch(document.getElementById('job-listings'));
-        const searchInput = document.getElementById('search-input');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                searchJobs(e.target.value, document.getElementById('job-listings'));
-            });
-        }
-        setTimeout(showNotification, 10000);
-    } else if (document.getElementById('analytics')) {
-        trackPageView('Analytics Dashboard');
-        handleAdminAuth();
-    } else if (document.getElementById('profile')) {
-        trackPageView('Profile Page');
-        handleProfile();
-    } else if (document.getElementById('job-detail')) {
-        trackPageView('Job Detail');
-        displayJobDetail();
-    } else if (document.getElementById('login-form')) {
-        if (typeof handleLoginPage === 'function') {
-            handleLoginPage();
-        } else {
-            console.error('handleLoginPage 함수가 정의되지 않았습니다.');
-        }
-    } else if (document.getElementById('signup-form')) {
-        handleSignupPage();
-    }
-});
-
 // 오류 처리 헬퍼 함수
 function handleError(message, elementId) {
     console.error(message);
@@ -934,11 +899,90 @@ function handleError(message, elementId) {
     }
 }
 
-function addFavoriteJob(jobId) {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    if (!favorites.includes(jobId)) {
-        favorites.push(jobId);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        alert('즐겨찾기에 추가되었습니다.');
+// DOMContentLoaded 초기화 수정
+document.addEventListener('DOMContentLoaded', async () => {
+    initializeAdminAccount();
+    await loadJobs();
+
+    if (!jobs || jobs.length === 0) {
+        handleError('공고 데이터를 로드할 수 없습니다.', 'job-detail');
+        handleError('공고 데이터를 로드할 수 없습니다.', 'job-listings');
+        return;
     }
-}
+
+    renderNavigation();
+
+    if (document.getElementById('login-form')) {
+        handleLoginPage();
+        return; // 로그인 페이지에서는 다른 기능 제한
+    }
+
+    if (document.getElementById('signup-form')) {
+        handleSignupPage();
+        return; // 회원가입 페이지에서는 다른 기능 제한
+    }
+
+    if (categorySelect) {
+        restrictToLoggedIn(() => {
+            categorySelect.innerHTML = `
+                <option value="all">전체 직군</option>
+                ${[...new Set(jobs.map(job => job.category))].map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+            `;
+            categorySelect.removeEventListener('change', handleCategoryChange);
+            categorySelect.addEventListener('change', handleCategoryChange);
+            function handleCategoryChange(e) {
+                const selectedCategory = e.target.value;
+                displayJobs(selectedCategory);
+                displayRecommendations(selectedCategory);
+                setTimeout(showNotification, 5000);
+            }
+            displayJobs('all');
+        });
+    }
+
+    if (document.getElementById('recommended-job-list')) {
+        restrictToLoggedIn(() => {
+            trackPageView('Main Page');
+            displayMainRecommendedJobs();
+            handleAdvancedSearch(document.getElementById('recommended-job-list'));
+            const searchInputMain = document.getElementById('search-input-main');
+            if (searchInputMain) {
+                searchInputMain.addEventListener('input', (e) => {
+                    searchJobs(e.target.value, document.getElementById('recommended-job-list'));
+                    setTimeout(showRecommendedJob, 5000);
+                });
+            }
+            setTimeout(showRecommendedJob, 5000);
+        });
+    } else if (document.getElementById('job-listings')) {
+        restrictToLoggedIn(() => {
+            trackPageView('Job Listings');
+            displayJobs('all');
+            displayRecommendations('all');
+            handleAdvancedSearch(document.getElementById('job-listings'));
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchJobs(e.target.value, document.getElementById('job-listings'));
+                });
+            }
+            setTimeout(showNotification, 10000);
+        });
+    } else if (document.getElementById('analytics')) {
+        restrictToLoggedIn(() => {
+            trackPageView('Analytics Dashboard');
+            handleAdminAuth();
+        });
+    } else if (document.getElementById('profile')) {
+        restrictToLoggedIn(() => {
+            trackPageView('Profile Page');
+            handleProfile();
+        });
+    } else if (document.getElementById('job-detail')) {
+        restrictToLoggedIn(() => {
+            trackPageView('Job Detail');
+            displayJobDetail();
+        });
+    }
+});
+

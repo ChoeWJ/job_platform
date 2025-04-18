@@ -1141,3 +1141,24 @@ footer {
 .favorite-btn:hover {
     background: #c0392b;
 }
+
+/* 즐겨찾기 버튼 스타일 */
+.favorite-button {
+    background: linear-gradient(135deg, #e84393, #c0392b);
+    margin-left: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.favorite-button:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.05);
+}
+
+.favorite-button:active {
+    transform: scale(1);
+}
