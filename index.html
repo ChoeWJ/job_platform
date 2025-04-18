@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>채용 플랫폼</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>채용 플랫폼</h1>
+        </header>
+            <nav>
+                <div class="nav-left">
+                    <a href="profile.html" class="detail-button profile-btn">프로필</a>
+                    <a href="main.html" class="detail-button home-btn">홈으로 돌아가기</a>
+                </div>
+                <div class="nav-center">
+                    <a href="index.html" class="detail-button job-list-btn">직군별 공고 보기</a>
+                </div>
+                <div class="nav-right">
+                    <div id="auth-button-container"></div>
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="직무명, 회사명 검색" class="search-input">
+                        <button id="advanced-search-btn" class="detail-button">상세 검색</button>
+                    </div>
+                </div>
+            </nav>
+        <div class="content-area">
+            <main id="job-listings">
+                <p>직군별 공고 로드 중...</p>
+            </main>
+            <div id="recommended-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-recommended">×</span>
+                    <h3>추천 공고</h3>
+                    <div id="recommended-job"></div>
+                </div>
+            </div>
+            <aside id="recommendations">
+                <h3>추천 공고</h3>
+                <div id="recommendation-list"></div>
+            </aside>
+        </div>
+        <section id="insights">
+            <h2>플랫폼 인사이트</h2>
+            <p>우리 플랫폼에서 소프트웨어 개발자 전환율 70% 달성!</p>
+        </section>
+        <footer>
+            <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
+        </footer>
+    </div>
+    <div id="notification-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-notification">×</span>
+            <h3>추천 공고</h3>
+            <div id="notification-jobs">
+                <!-- 추천 공고가 JavaScript로 삽입됩니다 -->
+            </div>
+        </div>
+    </div>
+    <div id="advanced-search-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-advanced-search">×</span>
+            <h3>상세 검색</h3>
+            <form id="advanced-search-form">
+                <label><input type="checkbox" id="salary-disclosed"> 연봉 공개 여부</label>
+                <input type="number" id="salary-min" placeholder="최소 연봉 (만원)" class="search-input">
+                <input type="number" id="salary-max" placeholder="최대 연봉 (만원)" class="search-input">
+                <select id="remote-filter">
+                    <option value="all">원격 근무 전체</option>
+                    <option value="true">원격 근무 가능</option>
+                    <option value="false">원격 근무 불가능</option>
+                </select>
+                <select id="category-filter">
+                    <option value="all">전체 직군</option>
+                    <option value="소프트웨어 개발">소프트웨어 개발</option>
+                    <option value="HR 및 채용">HR 및 채용</option>
+                    <option value="마케팅 및 광고">마케팅 및 광고</option>
+                    <option value="세일즈">세일즈</option>
+                    <option value="재무 및 회계">재무 및 회계</option>
+                    <option value="고객 서비스">고객 서비스</option>
+                    <option value="프로젝트 관리">프로젝트 관리</option>
+                    <option value="데이터 과학 및 분석">데이터 과학 및 분석</option>
+                    <option value="디자인">디자인</option>
+                    <option value="운영">운영</option>
+                </select>
+                <button type="submit" class="detail-button">검색</button>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="js/script.js"></script>
+</body>
+</html>

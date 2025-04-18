@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>직무 상세 - 채용 플랫폼</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>채용 플랫폼</h1>
+        </header>
+        <nav>
+            <a href="profile.html" class="detail-button profile-btn">프로필</a>
+            <a href="main.html" class="detail-button home-btn">홈으로 돌아가기</a>
+            <a href="index.html" class="detail-button">직군별 공고 보기</a>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="직무명, 회사명 검색" class="search-input">
+                <button id="advanced-search-btn" class="detail-button">상세 검색</button>
+            </div>
+        </nav>
+        <div id="job-detail">
+            <div class="company-header" id="company-image"></div>
+            <div class="detail-card">
+                <h2 id="detail-title"></h2>
+                <div class="detail-info">
+                    <p id="detail-company"></p>
+                    <p id="detail-salary"></p>
+                    <p id="detail-remote"></p>
+                </div>
+                <div class="detail-section">
+                    <h3>직무 설명</h3>
+                    <p id="detail-description"></p>
+                </div>
+                <div class="detail-section">
+                    <h3>경력 요건</h3>
+                    <p id="detail-experience"></p>
+                </div>
+                <div class="detail-section">
+                    <h3>자격 요건</h3>
+                    <ul id="detail-requirements"></ul>
+                </div>
+                <a href="#" class="apply-button">지금 지원하기</a>
+            </div>
+        </div>
+        <div id="advanced-search-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-advanced-search">×</span>
+                <h3>상세 검색</h3>
+                <form id="advanced-search-form">
+                    <label><input type="checkbox" id="salary-disclosed"> 연봉 공개 여부</label>
+                    <input type="number" id="salary-min" placeholder="최소 연봉 (만원)" class="search-input">
+                    <input type="number" id="salary-max" placeholder="최대 연봉 (만원)" class="search-input">
+                    <select id="remote-filter">
+                        <option value="all">원격 근무 전체</option>
+                        <option value="true">원격 근무 가능</option>
+                        <option value="false">원격 근무 불가능</option>
+                    </select>
+                    <select id="category-filter">
+                        <option value="all">전체 직군</option>
+                        <option value="소프트웨어 개발">소프트웨어 개발</option>
+                        <option value="HR 및 채용">HR 및 채용</option>
+                        <option value="마케팅 및 광고">마케팅 및 광고</option>
+                        <option value="세일즈">세일즈</option>
+                        <option value="재무 및 회계">재무 및 회계</option>
+                        <option value="고객 서비스">고객 서비스</option>
+                        <option value="프로젝트 관리">프로젝트 관리</option>
+                        <option value="데이터 과학 및 분석">데이터 과학 및 분석</option>
+                        <option value="디자인">디자인</option>
+                        <option value="운영">운영</option>
+                    </select>
+                    <button type="submit" class="detail-button">검색</button>
+                </form>
+            </div>
+        </div>
+        <footer>
+            <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
+            <a href="analytics.html" class="admin-link">관리자 대시보드</a>
+        </footer>
+    </div>
+    <script type="module" src="js/script.js"></script>
+</body>
+</html>

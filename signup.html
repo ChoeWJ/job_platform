@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>회원가입 - 채용 플랫폼</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="main-page">
+    <div class="wrapper">
+        <header>
+            <h1>채용 플랫폼</h1>
+        </header>
+        <nav>
+            <div class="nav-left">
+                <a href="login.html" class="detail-button">로그인</a>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="detail-button job-list-btn">직군별 공고 보기</a>
+            </div>
+            <div class="nav-right">
+                <div id="auth-button-container"></div>
+            </div>
+        </nav>
+        <section id="signup">
+            <h2>회원가입</h2>
+            <form id="signup-form" class="signup-form">
+                <div class="form-group">
+                    <input type="text" id="signup-name" placeholder=" " class="search-input" required>
+                    <label for="signup-name">이름</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="signup-email" placeholder=" " class="search-input" required>
+                    <label for="signup-email">이메일</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signup-password" placeholder=" " class="search-input" required>
+                    <label for="signup-password">비밀번호</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signup-confirm-password" placeholder=" " class="search-input" required>
+                    <label for="signup-confirm-password">비밀번호 확인</label>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" id="signup-agree-terms"> 이용 약관에 동의합니다</label>
+                </div>
+                <button type="submit" class="detail-button">회원가입</button>
+            </form>
+            <p>이미 계정이 있으신가요? <a href="login.html">로그인</a></p>
+        </section>
+        <footer>
+            <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
+        </footer>
+    </div>
+    <script type="module" src="js/script.js"></script>
+</body>
+</html>

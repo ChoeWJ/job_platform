@@ -1,0 +1,78 @@
+<!-- analytics.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>관리자 대시보드 - 채용 플랫폼</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="main-page">
+    <div class="wrapper">
+        <header>
+            <h1>관리자 대시보드</h1>
+        </header>
+        <nav>
+            <a href="main.html" class="detail-button home-btn">홈으로 돌아가기</a>
+        </nav>
+        <section id="analytics">
+            <h2>사용자 관리</h2>
+            <table id="user-table">
+                <thead>
+                    <tr>
+                        <th>이메일</th>
+                        <th>선호 직군</th>
+                        <th>이력서</th>
+                        <th>작업</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <h2>공고 관리</h2>
+            <form id="add-job-form">
+                <input type="text" id="job-title" placeholder="직무 제목" class="search-input" required>
+                <input type="text" id="job-category" placeholder="직군" class="search-input" required>
+                <input type="text" id="job-salary" placeholder="연봉 (만원)" class="search-input" required>
+                <select id="job-remote">
+                    <option value="true">원격 근무 가능</option>
+                    <option value="false">원격 근무 불가능</option>
+                </select>
+                <input type="text" id="job-company" placeholder="회사명" class="search-input" required>
+                <textarea id="job-description" placeholder="직무 설명" class="search-input" required></textarea>
+                <input type="text" id="job-experience" placeholder="경력 요건" class="search-input" required>
+                <input type="text" id="job-requirements" placeholder="자격 요건 (쉼표로 구분)" class="search-input" required>
+                <input type="text" id="job-image" placeholder="이미지 URL" class="search-input">
+                <button type="submit" class="detail-button">공고 추가</button>
+            </form>
+            <table id="job-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>제목</th>
+                        <th>직군</th>
+                        <th>회사</th>
+                        <th>작업</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+        <div id="auth-modal" class="modal">
+            <div class="modal-content">
+                <h3>관리자 인증</h3>
+                <input type="password" id="admin-password" placeholder="관리자 비밀번호" class="search-input">
+                <button id="auth-submit" class="detail-button">확인</button>
+                <p id="auth-error" style="display: none; color: red;">비밀번호가 잘못되었습니다.</p>
+            </div>
+        </div>
+        <footer>
+            <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
+        </footer>
+    </div>
+    <script type="module" src="js/script.js"></script>
+</body>
+</html>
