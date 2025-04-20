@@ -1,4 +1,3 @@
-<!-- analytics.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,57 +9,103 @@
     <title>관리자 대시보드 - 채용 플랫폼</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="main-page">
     <div class="wrapper">
         <header>
-            <h1>관리자 대시보드</h1>
+            <a href="main.html"><h1>관리자 대시보드</h1></a>
         </header>
         <nav>
-            <a href="main.html" class="detail-button home-btn">홈으로 돌아가기</a>
+            <!-- "홈으로 돌아가기" 버튼 제거 -->
         </nav>
         <section id="analytics">
+            <h2>AARRR 지표 (최근 30일)</h2>
+            <canvas id="aarrr-chart" width="400" height="200"></canvas>
+          
+            <h2>공고별 클릭 횟수</h2>
+            <table id="job-clicks-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>공고 제목</th>
+                  <th>회사</th>
+                  <th>클릭 횟수</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          
+            <h2>공고별 조회수 랭킹 (상위 5개)</h2>
+            <canvas id="job-clicks-ranking-chart" width="400" height="200"></canvas>
+          
+            <h2>직군별 랭킹 (상위 5개)</h2>
+            <canvas id="category-ranking-chart" width="400" height="200"></canvas>
+          
+            <h2>페이지 조회수 (PV)</h2>
+            <canvas id="pv-chart" width="400" height="200"></canvas>
+            <table id="pv-table">
+              <thead>
+                <tr>
+                  <th>페이지</th>
+                  <th>조회수</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          
+            <h2>MAU/DAU</h2>
+            <canvas id="mau-dau-chart" width="400" height="200"></canvas>
+          
+            <h2>직군별 클릭 수</h2>
+            <table id="click-table">
+              <thead>
+                <tr>
+                  <th>직군</th>
+                  <th>클릭 수</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          
+            <h2>회사별 공고 수</h2>
+            <table id="company-jobs-table">
+              <thead>
+                <tr>
+                  <th>회사</th>
+                  <th>공고 수</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          
             <h2>사용자 관리</h2>
             <table id="user-table">
-                <thead>
-                    <tr>
-                        <th>이메일</th>
-                        <th>선호 직군</th>
-                        <th>이력서</th>
-                        <th>작업</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
+              <thead>
+                <tr>
+                  <th>이메일</th>
+                  <th>선호 직군</th>
+                  <th>이력서</th>
+                  <th>작업</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
             </table>
+          
             <h2>공고 관리</h2>
-            <form id="add-job-form">
-                <input type="text" id="job-title" placeholder="직무 제목" class="search-input" required>
-                <input type="text" id="job-category" placeholder="직군" class="search-input" required>
-                <input type="text" id="job-salary" placeholder="연봉 (만원)" class="search-input" required>
-                <select id="job-remote">
-                    <option value="true">원격 근무 가능</option>
-                    <option value="false">원격 근무 불가능</option>
-                </select>
-                <input type="text" id="job-company" placeholder="회사명" class="search-input" required>
-                <textarea id="job-description" placeholder="직무 설명" class="search-input" required></textarea>
-                <input type="text" id="job-experience" placeholder="경력 요건" class="search-input" required>
-                <input type="text" id="job-requirements" placeholder="자격 요건 (쉼표로 구분)" class="search-input" required>
-                <input type="text" id="job-image" placeholder="이미지 URL" class="search-input">
-                <button type="submit" class="detail-button">공고 추가</button>
-            </form>
             <table id="job-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>제목</th>
-                        <th>직군</th>
-                        <th>회사</th>
-                        <th>작업</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>제목</th>
+                  <th>직군</th>
+                  <th>회사</th>
+                  <th>작업</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
             </table>
-        </section>
+          </section>
         <div id="auth-modal" class="modal">
             <div class="modal-content">
                 <h3>관리자 인증</h3>

@@ -1,5 +1,5 @@
 /* 전체 폰트 및 색상 업데이트 */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Stylish&family=Yeon+Sung&display=swap');
 
 * {
     margin: 0;
@@ -8,7 +8,7 @@
 }
 
 body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     background: linear-gradient(135deg, #ecf0f1, #dfe6e9);
     line-height: 1.6;
     color: #2c3e50;
@@ -32,7 +32,7 @@ body.main-page {
     100% { background-position: 0% 50%; }
 }
 
-/* 헤더 스타일 */
+/* 헤더 로고 스타일 조정 */
 header {
     background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
@@ -41,9 +41,19 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+header a {
+    text-decoration: none;
+    color: inherit;
+}
+
 header h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 32px;
+    cursor: pointer;
+}
+
+header h1:hover {
+    opacity: 0.8;
 }
 
 /* 네비게이션 레이아웃 */
@@ -56,6 +66,9 @@ nav {
     justify-content: space-between;
     gap: 10px;
     flex-wrap: nowrap;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .nav-left, .nav-center, .nav-right {
@@ -78,7 +91,7 @@ nav {
     gap: 8px;
 }
 
-.profile-btn, .job-list-btn, .home-btn, #login-btn, #logout-btn, #signup-btn {
+.profile-btn, .job-list-btn, #login-btn, #logout-btn, #signup-btn {
     padding: 8px 14px;
     font-size: 14px;
     border-radius: 6px;
@@ -114,56 +127,11 @@ nav {
     margin-right: 15px;
 }
 
-.home-btn {
-    display: none;
-    order: 3;
-    padding: 8px 16px;
-}
-
-body:not(.main-page) .home-btn {
-    display: inline-block;
-}
-
 nav .detail-button {
-    min-width: 80px;
+    max-width: 150px;
     text-align: center;
 }
 
-/* 반응형 디자인 조정 */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        gap: 8px;
-    }
-    .nav-left, .nav-center, .nav-right {
-        justify-content: center;
-        width: 100%;
-    }
-    .nav-right {
-        margin-left: 0;
-    }
-    .search-container {
-        margin-left: 0;
-        margin-top: 10px;
-        width: 100%;
-        justify-content: center;
-    }
-    .profile-btn, .detail-button:not(.profile-btn):not(.home-btn), .home-btn {
-        margin: 5px 0;
-        width: auto;
-    }
-    #auth-button-container {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 600px) {
-    nav .detail-button {
-        min-width: 80px;
-        font-size: 14px;
-    }
-}
 
 /* 전체 직군 선택 스타일 */
 nav select {
@@ -188,7 +156,7 @@ nav select:focus {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 8px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     font-size: 16px;
     text-decoration: none;
     display: inline-block;
@@ -372,7 +340,7 @@ nav select:focus {
 
 /* 폼 헤더 애니메이션 */
 #login h2, #signup h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     font-size: 28px;
     color: #2c3e50;
     text-align: center;
@@ -402,6 +370,9 @@ nav select:focus {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .content-area {
@@ -419,40 +390,34 @@ main#job-listings, #recommended-job-list {
     margin: 20px;
 }
 
-/* 공고 박스 사이즈 고정 */
+/* 공고 박스 크기 및 스타일 */
 .job-card {
     border: 1px solid #ddd;
-    padding: 20px;
-    width: 320px; /* 고정 너비 */
-    height: 260px; /* 고정 높이 */
+    padding: 15px;
+    margin: 10px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-    transition: transform 0.3s, box-shadow 0.3s;
-    animation: slideIn 0.5s ease-out;
-    display: flex;
-    flex-direction: column;
-    visibility: visible;
-    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .job-card:hover {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+transform: translateY(-5px);
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.job-card h3, .job-card p {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    display: block;
-    max-height: none;
+.job-card .highlight {
+font-weight: bold;
+color: #2c3e50;
+background-color: #e9ecef;
+padding: 3px 8px;
+border-radius: 3px;
 }
 
 .job-card h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 18px;
-    margin: 0 0 10px;
+    font-size: 16px;
+    margin: 0 0 8px;
     color: #2c3e50;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -460,9 +425,9 @@ main#job-listings, #recommended-job-list {
 }
 
 .job-card p {
-    font-size: 14px;
+    font-size: 12px;
     color: #34495e;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -470,6 +435,68 @@ main#job-listings, #recommended-job-list {
 
 .job-card .detail-button {
     margin-top: auto;
+    align-self: center;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* 한 줄에 4개 배치 및 스크롤 형식 */
+.job-list, .category-jobs, #popular-job-list, #preferred-recommended-jobs, #favorite-jobs-list {
+    display: flex;
+    flex-wrap: wrap; /* wrap으로 변경 */
+    justify-content: space-between; /* 간격 균등 분배 */
+    gap: 20px;
+    padding-bottom: 10px;
+    width: 100%;
+    max-width: 1200px; /* 고정된 최대 너비 */
+}
+
+/* 1200px 이하일 때 스크롤 형식 */
+@media (max-width: 1200px) {
+    .job-list, .category-jobs, #popular-job-list, #preferred-recommended-jobs, #favorite-jobs-list {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+}
+
+/* 스크롤바 스타일링 */
+.job-list::-webkit-scrollbar, .category-jobs::-webkit-scrollbar, #popular-job-list::-webkit-scrollbar, #preferred-recommended-jobs::-webkit-scrollbar, #favorite-jobs-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.job-list::-webkit-scrollbar-thumb, .category-jobs::-webkit-scrollbar-thumb, #popular-job-list::-webkit-scrollbar-thumb, #preferred-recommended-jobs::-webkit-scrollbar-thumb, #favorite-jobs-list::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 4px;
+}
+
+.job-list::-webkit-scrollbar-track, .category-jobs::-webkit-scrollbar-track, #popular-job-list::-webkit-scrollbar-track, #preferred-recommended-jobs::-webkit-scrollbar-track, #favorite-jobs-list::-webkit-scrollbar-track {
+    background: #f0f4f8;
+}
+
+
+
+/* 한 줄에 4개 배치 및 스크롤 형식 */
+.job-list, .category-jobs, #popular-job-list, #preferred-recommended-jobs, #favorite-jobs-list {
+    display: flex;
+    flex-wrap: nowrap; /* 기본적으로 한 줄에 배치 */
+    justify-content: flex-start;
+    gap: 20px;
+    overflow-x: auto; /* 수평 스크롤 활성화 */
+    padding-bottom: 10px; /* 스크롤바와의 간격 */
+}
+
+/* 스크롤바 스타일링 (선택 사항) */
+.job-list::-webkit-scrollbar, .category-jobs::-webkit-scrollbar, #popular-job-list::-webkit-scrollbar, #preferred-recommended-jobs::-webkit-scrollbar, #favorite-jobs-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.job-list::-webkit-scrollbar-thumb, .category-jobs::-webkit-scrollbar-thumb, #popular-job-list::-webkit-scrollbar-thumb, #preferred-recommended-jobs::-webkit-scrollbar-thumb, #favorite-jobs-list::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 4px;
+}
+
+.job-list::-webkit-scrollbar-track, .category-jobs::-webkit-scrollbar-track, #popular-job-list::-webkit-scrollbar-track, #preferred-recommended-jobs::-webkit-scrollbar-track, #favorite-jobs-list::-webkit-scrollbar-track {
+    background: #f0f4f8;
 }
 
 /* 추천 공고 스타일 및 모션 */
@@ -564,40 +591,64 @@ footer {
     text-decoration: underline;
 }
 
-/* 알림창 모달 스타일 */
+/* 모달 창 스타일 개선 */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-}
-
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    }
+    
 .modal.show {
-    opacity: 1;
-    visibility: visible;
+display: block;
+opacity: 1;
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #ffffff, #f0f4f8);
-    margin: 10% auto;
-    padding: 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+background-color: #fff;
+margin: 15% auto;
+padding: 20px;
+border-radius: 10px;
+width: 90%;
+max-width: 500px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+animation: slideDown 0.3s ease;
 }
 
-@keyframes modalPop {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+@keyframes slideDown {
+from {
+transform: translateY(-50px);
+opacity: 0;
+}
+to {
+transform: translateY(0);
+opacity: 1;
+}
+}
+
+/* 모달 내부 버튼 스타일 */
+.modal-content button {
+padding: 10px 20px;
+margin: 5px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+transition: background-color 0.2s ease;
+}
+
+.modal-content button.detail-button {
+background-color: #007bff;
+color: white;
+}
+
+.modal-content button.detail-button:hover {
+background-color: #0056b3;
 }
 
 .close-notification {
@@ -634,6 +685,26 @@ footer {
     text-decoration: underline;
 }
 
+/* 모달 내부 버튼 스타일 */
+.modal-content button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .modal-content button.detail-button {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .modal-content button.detail-button:hover {
+    background-color: #0056b3;
+  }
+
 /* 상세 페이지 스타일 */
 #job-detail {
     margin: 20px;
@@ -665,7 +736,7 @@ footer {
 }
 
 .detail-card h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     font-size: 28px;
     color: #2c3e50;
     margin-bottom: 15px;
@@ -697,7 +768,7 @@ footer {
 }
 
 .detail-section h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     font-size: 20px;
     color: #3498db;
     margin-bottom: 10px;
@@ -725,38 +796,18 @@ footer {
     margin-top: 20px;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .content-area {
-        flex-direction: column;
-    }
-    aside#recommendations {
-        width: 100%;
-        margin: 20px;
-    }
-}
-
-@media (max-width: 600px) {
-    .job-card {
-        width: 100%;
-        margin: 10px 0;
-    }
-    nav select {
-        width: 100%;
-    }
-}
-
-/* 섹션 스타일 */
-#platform-intro, #recommended-jobs, #advertisement, #insights, #profile, #analytics {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px;
+/* 섹션 간격 조정 */
+#recommended-jobs, #advertisement, #recent-trends, #popular-jobs, #job-tips {
+    margin: 20px 0;
     padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 #platform-intro h2, #insights h2, #profile h2, #analytics h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     color: #3498db;
 }
 
@@ -819,7 +870,7 @@ footer {
 }
 
 .ad-content h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     font-size: 22px;
     margin-bottom: 10px;
 }
@@ -997,7 +1048,7 @@ footer {
 }
 
 #resume-display h4 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Do Hyeon",  system-ui;
     font-size: 18px;
     color: #ff6b6b;
     margin-bottom: 10px;
@@ -1081,11 +1132,7 @@ footer {
     outline: none;
 }
 
-@media (max-width: 600px) {
-    #advanced-search-form {
-        grid-template-columns: 1fr;
-    }
-}
+
 
 .close-advanced-search {
     color: #aaa;
@@ -1161,4 +1208,540 @@ footer {
 
 .favorite-button:active {
     transform: scale(1);
+}
+
+/* 즐겨찾기 목록 스타일 */
+#favorite-jobs {
+    margin-top: 20px;
+}
+
+#favorite-jobs h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#favorite-jobs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#favorite-jobs-list .job-card {
+    width: 320px;
+    height: 260px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#favorite-jobs-list .job-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#favorite-jobs-list .job-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    margin: 0 0 10px;
+    color: #2c3e50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#favorite-jobs-list .job-card p {
+    font-size: 14px;
+    color: #34495e;
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#favorite-jobs-list .job-card .detail-button {
+    margin-top: auto;
+}
+
+#favorite-jobs-list .remove-favorite {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    padding: 8px 16px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#favorite-jobs-list .remove-favorite:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.05);
+}
+
+#favorite-jobs-list .remove-favorite:active {
+    transform: scale(1);
+}
+
+/* 다중 선택 스타일 */
+#preferred-categories {
+    width: 100%;
+    max-width: 300px;
+    height: 150px; /* 다중 선택을 위한 높이 */
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#preferred-categories:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+    outline: none;
+}
+
+#category-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#save-preferred {
+    align-self: flex-start;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* 선호 직군 관리 섹션 */
+#selected-categories {
+    margin-top: 20px;
+}
+
+#selected-categories h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#selected-categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f4f8;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.category-item .remove-category {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.category-item .remove-category:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.05);
+}
+
+/* 이력서 관리 섹션 */
+#saved-resume {
+    margin-top: 20px;
+}
+
+#saved-resume h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#saved-resume-list {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dfe6e9;
+}
+
+#saved-resume-list h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    color: #ff6b6b;
+    margin-bottom: 10px;
+}
+
+#saved-resume-list p {
+    font-size: 14px;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+/* 이력서 입력 폼 스타일 */
+#resume-skills {
+    width: 100%;
+    max-width: 300px;
+    height: 150px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#resume-skills:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+    outline: none;
+}
+
+#resume-other-skills {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+    background-color: #f9f9f9;
+}
+
+#sns-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sns-entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sns-type {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+    background-color: #f9f9f9;
+}
+
+.sns-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+    background-color: #f9f9f9;
+}
+
+.add-sns {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* 선호 직군 버튼 스타일 */
+#category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.category-button {
+    background: #f0f4f8;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+    cursor: pointer;
+    font-size: 14px;
+    color: #2c3e50;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.category-button:hover {
+    background: #e0e7ff;
+    transform: scale(1.05);
+}
+
+.category-button.selected {
+    background: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+/* 기술 선택 모달 스타일 */
+#skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* 기술 선택 버튼 스타일 */
+.skill-button {
+padding: 8px 15px;
+margin: 5px;
+border: 1px solid #ddd;
+border-radius: 5px;
+background-color: #f8f9fa;
+cursor: pointer;
+transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.skill-button.selected {
+background-color: #28a745;
+color: white;
+border-color: #28a745;
+}
+
+.skill-button:hover {
+background-color: #e9ecef;
+transform: scale(1.05);
+}
+
+#skills-modal .modal-content {
+    padding: 20px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#other-skills-input {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #dfe6e9;
+    background-color: #f9f9f9;
+}
+
+#save-skills {
+    align-self: flex-end;
+}
+
+.close-skills {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-skills:hover {
+    color: #2c3e50;
+}
+
+/* 선택된 기술 표시 */
+#selected-skills-display {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #34495e;
+}
+
+/* 실시간 뉴스 섹션 스타일 */
+#real-time-news {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#real-time-news h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2x2 그리드 */
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.news-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    transition: opacity 0.5s ease, transform 0.3s ease;
+    height: 300px; /* 고정 높이 */
+    overflow: hidden; /* 넘치는 내용 잘림 */
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.news-image {
+    width: 100%;
+    height: 120px; /* 고정 이미지 높이 */
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.news-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.news-content a {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 2줄로 제한 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.news-content a:hover {
+    text-decoration: underline;
+}
+
+.news-source {
+    font-size: 12px;
+    color: #555;
+}
+
+.news-description {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 3줄로 제한 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 차트 스타일링 */
+#pv-chart, #mau-dau-chart {
+    max-width: 600px;
+    margin: 20px 0;
+}
+
+/* 로딩 메시지 스타일 */
+.loading-message {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-message::before {
+content: '';
+display: inline-block;
+width: 20px;
+height: 20px;
+border: 3px solid #007bff;
+border-top: 3px solid transparent;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+margin-right: 10px;
+}
+
+@keyframes spin {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+
+/* 피드백 버튼 스타일 */
+.feedback-like,
+.feedback-dislike {
+margin: 5px;
+padding: 5px 10px;
+border: none;
+border-radius: 3px;
+cursor: pointer;
+}
+
+.feedback-like {
+background-color: #28a745;
+color: white;
+}
+
+.feedback-dislike {
+background-color: #dc3545;
+color: white;
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+    text-align: center;
+    color: #dc3545;
+    padding: 20px;
+    background-color: #f8d7da;
+    border-radius: 5px;
+}
+
+/* 버튼 스타일 */
+.detail-button {
+display: inline-block;
+padding: 8px 15px;
+background-color: #007bff;
+color: white;
+text-decoration: none;
+border-radius: 5px;
+transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.detail-button:hover {
+background-color: #0056b3;
+transform: scale(1.05);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+.job-card {
+    margin: 5px;
+    padding: 10px;
+}
+
+.modal-content {
+    width: 95%;
+    margin: 20% auto;
+}
+
+.detail-button {
+    padding: 6px 12px;
+    font-size: 14px;
+}
 }

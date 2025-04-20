@@ -13,40 +13,111 @@
 <body>
     <div class="wrapper">
         <header>
-            <h1>채용 플랫폼 - 프로필</h1>
+            <a href="main.html"><h1>채용 플랫폼</h1></a>
         </header>
-        <nav>
-            <a href="main.html" class="detail-button">홈으로 돌아가기</a>
-            <a href="index.html" class="detail-button">직군별 공고 보기</a>
-        </nav>
+            <nav>
+                <div class="nav-left">
+                    <a href="profile.html" class="detail-button profile-btn">프로필</a>
+                </div>
+                <div class="nav-center">
+                    <a href="index.html" class="detail-button job-list-btn">직군별 공고 보기</a>
+                </div>
+                <div class="nav-right">
+                    <div id="auth-button-container"></div>
+                    <div class="search-container">
+                        <input type="text" id="search-input-main" class="search-input" placeholder="공고 검색">
+                        <button id="advanced-search-btn-main" class="detail-button">상세 검색</button>
+                    </div>
+                </div>
+            </nav>
         <section id="profile">
             <h2>사용자 프로필</h2>
             <div class="profile-section">
-                <h3>선호 직군 설정</h3>
-                <select id="preferred-category">
-                    <option value="">선호 직군 선택</option>
-                    <option value="소프트웨어 개발">소프트웨어 개발</option>
-                    <option value="HR 및 채용">HR 및 채용</option>
-                    <option value="마케팅 및 광고">마케팅 및 광고</option>
-                    <option value="세일즈">세일즈</option>
-                    <option value="재무 및 회계">재무 및 회계</option>
-                    <option value="고객 서비스">고객 서비스</option>
-                    <option value="프로젝트 관리">프로젝트 관리</option>
-                    <option value="데이터 과학 및 분석">데이터 과학 및 분석</option>
-                    <option value="디자인">디자인</option>
-                    <option value="운영">운영</option>
-                </select>
-                <button id="save-preferred" class="detail-button">저장</button>
+                <section id="category-section" class="profile-section">
+                    <h3>선호 직군 설정</h3>
+                    <div id="category-list">
+                        <button class="category-button" data-category="소프트웨어 개발">소프트웨어 개발</button>
+                        <button class="category-button" data-category="HR 및 채용">HR 및 채용</button>
+                        <button class="category-button" data-category="마케팅 및 광고">마케팅 및 광고</button>
+                        <button class="category-button" data-category="세일즈">세일즈</button>
+                        <button class="category-button" data-category="재무 및 회계">재무 및 회계</button>
+                        <button class="category-button" data-category="고객 서비스">고객 서비스</button>
+                        <button class="category-button" data-category="프로젝트 관리">프로젝트 관리</button>
+                        <button class="category-button" data-category="데이터 과학 및 분석">데이터 과학 및 분석</button>
+                        <button class="category-button" data-category="디자인">디자인</button>
+                        <button class="category-button" data-category="운영">운영</button>
+                    </div>
+                </section>
+                <section id="selected-categories" class="profile-section">
+                    <h3>내가 선택한 선호 직군</h3>
+                    <div id="selected-categories-list"></div>
+                </section>
             </div>
             <div class="profile-section">
-                <h3>이력서 작성</h3>
-                <form id="resume-form">
-                    <input type="text" id="resume-name" placeholder="이름" class="search-input" required>
-                    <input type="email" id="resume-email" placeholder="이메일" class="search-input" required>
-                    <textarea id="resume-experience" placeholder="경력 (예: 회사명, 직무, 기간)" class="search-input" rows="4"></textarea>
-                    <textarea id="resume-skills" placeholder="기술 및 자격 (예: Python, PMP)" class="search-input" rows="4"></textarea>
-                    <button type="submit" id="save-resume" class="detail-button">저장</button>
-                </form>
+                <section id="resume-section" class="profile-section">
+                    <h3>이력서 입력</h3>
+                    <form id="resume-form">
+                        <div class="form-group">
+                            <input type="text" id="resume-name" placeholder=" " class="search-input" required>
+                            <label for="resume-name">이름</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="resume-experience" placeholder=" " class="search-input">
+                            <label for="resume-experience">경력</label>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="select-skills" class="detail-button">기술 및 자격 선택</button>
+                            <div id="selected-skills-display"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>SNS/링크</label>
+                            <div id="sns-inputs">
+                                <div class="sns-entry">
+                                    <select class="sns-type">
+                                        <option value="Email">Email</option>
+                                        <option value="GitHub">GitHub</option>
+                                        <option value="LinkedIn">LinkedIn</option>
+                                        <option value="Blog">Blog</option>
+                                        <option value="Portfolio">Portfolio</option>
+                                    </select>
+                                    <input type="text" class="sns-input" data-sns-type="Email" placeholder="SNS/링크 입력">
+                                    <button type="button" class="add-sns detail-button">추가</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="detail-button">저장</button>
+                    </form>
+                </section>
+                <div id="skills-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-skills">×</span>
+                        <h3>기술 및 자격 선택</h3>
+                        <div id="skills-list">
+                            <button class="skill-button" data-skill="Java">Java</button>
+                            <button class="skill-button" data-skill="Python">Python</button>
+                            <button class="skill-button" data-skill="JavaScript">JavaScript</button>
+                            <button class="skill-button" data-skill="React">React</button>
+                            <button class="skill-button" data-skill="Node.js">Node.js</button>
+                            <button class="skill-button" data-skill="SQL">SQL</button>
+                            <button class="skill-button" data-skill="Git">Git</button>
+                            <button class="skill-button" data-skill="AWS">AWS</button>
+                            <button class="skill-button" data-skill="Docker">Docker</button>
+                            <button class="skill-button" data-skill="Kubernetes">Kubernetes</button>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="other-skills-input" placeholder="기타 기술 (직접 입력)" class="search-input">
+                        </div>
+                        <button id="save-skills" class="detail-button">저장</button>
+                    </div>
+                </div>
+                <section id="saved-resume" class="profile-section">
+                    <h3>내가 저장한 이력서</h3>
+                    <div id="saved-resume-list"></div>
+                </section>
+                <section id="favorite-jobs" class="profile-section">
+                    <h3>즐겨찾기 목록</h3>
+                    <div id="favorite-jobs-list"></div>
+                </section>
                 <div id="resume-display" style="margin-top: 20px;"></div>
             </div>
             <div class="profile-section">
@@ -58,6 +129,6 @@
             <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
         </footer>
     </div>
-    <script src="js/script.js"></script>
+    <script type="module" src="js/script.js"></script>
 </body>
 </html>
