@@ -1043,7 +1043,7 @@ function renderNavigation() {
       logoutBtn.textContent = '로그아웃';
       logoutBtn.addEventListener('click', () => {
           handleLogout();
-          window.location.href = 'main.html';
+          window.location.href = 'index.html';
           logAction('logout', {});
       });
       authButtonContainer.appendChild(logoutBtn);
@@ -1127,7 +1127,7 @@ function handleLoginPage() {
       const password = passwordInput.value.trim(); // 공백 제거
       console.log('로그인 시도:', { email, password }); // 디버깅 로그 추가
       if (handleLogin(email, password)) {
-          window.location.href = 'main.html';
+          window.location.href = 'index.html';
           logAction('loginSuccess', { email });
       } else {
           const errorMessage = document.createElement('p');
@@ -2261,9 +2261,9 @@ function displayMainRecommendedJobs() {
   });
 }
 
+
 // showRecommendedJobsModal
-// showRecommendedJobsModal
-// showRecommendedJobsModal
+// showRecommendedJobsModal 함수 수정
 function showRecommendedJobsModal() {
   return restrictToLoggedIn(() => {
       const recommendedModal = document.getElementById('preferred-recommended-modal');
@@ -2313,162 +2313,159 @@ function showRecommendedJobsModal() {
       const currentHour = new Date().getHours();
       const delay = Math.abs(currentHour - activeHour) < 3 ? 5000 : 15000;
 
-      setTimeout(() => {
-          user.feedback = user.feedback || {};
-          const userFeedback = user.feedback;
+      // 지연 시간 제거, 즉시 실행
+      user.feedback = user.feedback || {};
+      const userFeedback = user.feedback;
 
-          let recommendedJobsList = [];
-          jobs.forEach(job => {
-              if (recentJobIds.includes(job.id)) return;
+      let recommendedJobsList = [];
+      jobs.forEach(job => {
+          if (recentJobIds.includes(job.id)) return;
 
-              let score = 0;
-              if (preferredCategories.includes(job.category)) {
-                  score += 3;
+          let score = 0;
+          if (preferredCategories.includes(job.category)) {
+              score += 3;
+          }
+
+          const requiredSkills = job.requirements || [];
+          const matchedSkills = requiredSkills.filter(skill => userSkills.includes(skill));
+          score += (matchedSkills.length * 2);
+
+          const requiredExperience = job.experience ? parseInt(job.experience) || 0 : 0;
+          if (userExperience >= requiredExperience) {
+              score += 1;
+          }
+
+          if (job.remote) {
+              score += 1;
+          }
+
+          const salary = parseInt(job.salary.replace(/[^0-9]/g, '') || '0');
+          score += (salary / 10000000) * 0.5;
+
+          if (appliedCategories.includes(job.category)) {
+              score += 2;
+          }
+
+          if (userFeedback[job.id]) {
+              score += userFeedback[job.id] === 'like' ? 1 : -1;
+          }
+
+          job.score = score;
+          recommendedJobsList.push(job);
+      });
+
+      recommendedJobsList = recommendedJobsList
+          .sort((a, b) => b.score - a.score)
+          .slice(0, Math.max(5, Math.min(10, recommendedJobsList.length)));
+
+      recommendedJobs.innerHTML = '';
+      if (recommendedJobsList.length > 0) {
+          recommendedJobsList.forEach((job, index) => {
+              if (job) {
+                  const jobDiv = document.createElement('div');
+                  jobDiv.className = 'job-card hidden';
+                  jobDiv.style.animationDelay = `${index * 0.1}s`;
+                  jobDiv.innerHTML = `
+                      <h3>${job.title} - ${job.company}</h3>
+                      <p class="highlight">연봉: ${job.salary}</p>
+                      <p class="highlight">원격 근무: ${job.remote ? '가능' : '불가능'}</p>
+                      <p>추천 점수: ${job.score.toFixed(2)}</p>
+                      <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
+                      <button class="feedback-like" data-job-id="${job.id}">${userFeedback[job.id] === 'like' ? '❤️ 좋아요' : '좋아요'}</button>
+                      <button class="feedback-dislike" data-job-id="${job.id}">${userFeedback[job.id] === 'dislike' ? '👎 싫어요' : '싫어요'}</button>
+                  `;
+                  const detailButton = jobDiv.querySelector('.detail-button');
+                  detailButton.addEventListener('click', (e) => {
+                      e.preventDefault();
+                      jobDiv.classList.add('clicked');
+                      detailButton.classList.add('loading');
+                      detailButton.innerHTML = '<span class="spinner"></span> 로드 중...';
+                      setTimeout(() => {
+                          trackClick(job.category, job.id);
+                          window.location.href = `job-detail.html?id=${job.id}`;
+                      }, 500);
+                  });
+                  const likeButton = jobDiv.querySelector('.feedback-like');
+                  likeButton.addEventListener('click', () => {
+                      likeButton.classList.add('animate-like');
+                      userFeedback[job.id] = 'like';
+                      localStorage.setItem('users', JSON.stringify(users));
+                      currentUser.feedback = userFeedback;
+                      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                      showRecommendedJobsModal();
+                      logAction('feedbackLike', { jobId: job.id });
+                  });
+                  const dislikeButton = jobDiv.querySelector('.feedback-dislike');
+                  dislikeButton.addEventListener('click', () => {
+                      dislikeButton.classList.add('animate-dislike');
+                      userFeedback[job.id] = 'dislike';
+                      localStorage.setItem('users', JSON.stringify(users));
+                      currentUser.feedback = userFeedback;
+                      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                      showRecommendedJobsModal();
+                      logAction('feedbackDislike', { jobId: job.id });
+                  });
+                  recommendedJobs.appendChild(jobDiv);
+
+                  const observer = new IntersectionObserver((entries) => {
+                      entries.forEach(entry => {
+                          if (entry.isIntersecting) {
+                              entry.target.classList.remove('hidden');
+                              entry.target.classList.add('fade-in');
+                              observer.unobserve(entry.target);
+                          }
+                      });
+                  }, { threshold: 0.1 });
+                  observer.observe(jobDiv);
               }
-
-              const requiredSkills = job.requirements || [];
-              const matchedSkills = requiredSkills.filter(skill => userSkills.includes(skill));
-              score += (matchedSkills.length * 2);
-
-              const requiredExperience = job.experience ? parseInt(job.experience) || 0 : 0;
-              if (userExperience >= requiredExperience) {
-                  score += 1;
-              }
-
-              if (job.remote) {
-                  score += 1;
-              }
-
-              const salary = parseInt(job.salary.replace(/[^0-9]/g, '') || '0');
-              score += (salary / 10000000) * 0.5;
-
-              if (appliedCategories.includes(job.category)) {
-                  score += 2;
-              }
-
-              if (userFeedback[job.id]) {
-                  score += userFeedback[job.id] === 'like' ? 1 : -1;
-              }
-
-              job.score = score;
-              recommendedJobsList.push(job);
           });
 
-          recommendedJobsList = recommendedJobsList
-              .sort((a, b) => b.score - a.score)
-              .slice(0, Math.max(5, Math.min(10, recommendedJobsList.length)));
+          recommendedModal.classList.add('show');
+          recommendedModal.classList.add('scale-up');
+          recommendedModal.style.display = 'block';
 
-          recommendedJobs.innerHTML = '';
-          if (recommendedJobsList.length > 0) {
-              recommendedJobsList.forEach((job, index) => {
-                  if (job) {
-                      const jobDiv = document.createElement('div');
-                      jobDiv.className = 'job-card hidden';
-                      jobDiv.style.animationDelay = `${index * 0.1}s`;
-                      jobDiv.innerHTML = `
-                          <h3>${job.title} - ${job.company}</h3>
-                          <p class="highlight">연봉: ${job.salary}</p>
-                          <p class="highlight">원격 근무: ${job.remote ? '가능' : '불가능'}</p>
-                          <p>추천 점수: ${job.score.toFixed(2)}</p>
-                          <a href="job-detail.html?id=${job.id}" class="detail-button">상세 보기</a>
-                          <button class="feedback-like" data-job-id="${job.id}">${userFeedback[job.id] === 'like' ? '❤️ 좋아요' : '좋아요'}</button>
-                          <button class="feedback-dislike" data-job-id="${job.id}">${userFeedback[job.id] === 'dislike' ? '👎 싫어요' : '싫어요'}</button>
-                      `;
-                      const detailButton = jobDiv.querySelector('.detail-button');
-                      detailButton.addEventListener('click', (e) => {
-                          e.preventDefault();
-                          jobDiv.classList.add('clicked');
-                          detailButton.classList.add('loading');
-                          detailButton.innerHTML = '<span class="spinner"></span> 로드 중...';
-                          setTimeout(() => {
-                              trackClick(job.category, job.id);
-                              window.location.href = `job-detail.html?id=${job.id}`;
-                          }, 500);
-                      });
-                      const likeButton = jobDiv.querySelector('.feedback-like');
-                      likeButton.addEventListener('click', () => {
-                          likeButton.classList.add('animate-like');
-                          userFeedback[job.id] = 'like';
-                          localStorage.setItem('users', JSON.stringify(users));
-                          currentUser.feedback = userFeedback;
-                          localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                          showRecommendedJobsModal();
-                          logAction('feedbackLike', { jobId: job.id });
-                      });
-                      const dislikeButton = jobDiv.querySelector('.feedback-dislike');
-                      dislikeButton.addEventListener('click', () => {
-                          dislikeButton.classList.add('animate-dislike');
-                          userFeedback[job.id] = 'dislike';
-                          localStorage.setItem('users', JSON.stringify(users));
-                          currentUser.feedback = userFeedback;
-                          localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                          showRecommendedJobsModal();
-                          logAction('feedbackDislike', { jobId: job.id });
-                      });
-                      recommendedJobs.appendChild(jobDiv);
+          window.removeEventListener('click', handleRecommendedModalClick);
+          window.addEventListener('click', handleRecommendedModalClick);
 
-                      const observer = new IntersectionObserver((entries) => {
-                          entries.forEach(entry => {
-                              if (entry.isIntersecting) {
-                                  entry.target.classList.remove('hidden');
-                                  entry.target.classList.add('fade-in');
-                                  observer.unobserve(entry.target);
-                              }
-                          });
-                      }, { threshold: 0.1 });
-                      observer.observe(jobDiv);
-                  }
-              });
-
-              recommendedModal.classList.add('show');
-              recommendedModal.classList.add('scale-up');
-              recommendedModal.style.display = 'block';
-
-              // 기존 이벤트 리스너 제거 후 새로 추가
-              window.removeEventListener('click', handleRecommendedModalClick);
-              window.addEventListener('click', handleRecommendedModalClick);
-
-              function handleRecommendedModalClick(event) {
-                  if (event.target === recommendedModal) {
-                      recommendedModal.classList.remove('show');
-                      recommendedModal.classList.add('scale-down');
-                      setTimeout(() => {
-                          recommendedModal.style.display = 'none';
-                          recommendedModal.classList.remove('scale-down');
-                          window.removeEventListener('click', handleRecommendedModalClick); // 이벤트 리스너 제거
-                      }, 300);
-                      logAction('closeRecommendedModalOutside', {});
-                  }
-              }
-
-              if (closeRecommended) {
-                  closeRecommended.removeEventListener('click', handleCloseRecommendedModal); // 기존 리스너 제거
-                  closeRecommended.addEventListener('click', handleCloseRecommendedModal);
-              }
-
-              function handleCloseRecommendedModal() {
+          function handleRecommendedModalClick(event) {
+              if (event.target === recommendedModal) {
                   recommendedModal.classList.remove('show');
                   recommendedModal.classList.add('scale-down');
                   setTimeout(() => {
                       recommendedModal.style.display = 'none';
                       recommendedModal.classList.remove('scale-down');
-                      window.removeEventListener('click', handleRecommendedModalClick); // 이벤트 리스너 제거
+                      window.removeEventListener('click', handleRecommendedModalClick);
                   }, 300);
-                  logAction('closeRecommendedModal', {});
+                  logAction('closeRecommendedModalOutside', {});
               }
-
-              // 모달이 표시되었음을 localStorage에 기록
-              localStorage.setItem('hasShownInitialModal', 'true');
-          } else {
-              console.log('추천 공고가 없습니다.');
           }
 
-          logAction('showRecommendedJobsModal', {
-              jobCount: recommendedJobsList.length,
-              recommendedJobIds: recommendedJobsList.map(job => job.id),
-              delay: delay
-          });
-      }, delay);
+          if (closeRecommended) {
+              closeRecommended.removeEventListener('click', handleCloseRecommendedModal);
+              closeRecommended.addEventListener('click', handleCloseRecommendedModal);
+          }
+
+          function handleCloseRecommendedModal() {
+              recommendedModal.classList.remove('show');
+              recommendedModal.classList.add('scale-down');
+              setTimeout(() => {
+                  recommendedModal.style.display = 'none';
+                  recommendedModal.classList.remove('scale-down');
+                  window.removeEventListener('click', handleRecommendedModalClick);
+              }, 300);
+              logAction('closeRecommendedModal', {});
+          }
+
+          localStorage.setItem('hasShownInitialModal', 'true');
+      } else {
+          console.log('추천 공고가 없습니다.');
+      }
+
+      logAction('showRecommendedJobsModal', {
+          jobCount: recommendedJobsList.length,
+          recommendedJobIds: recommendedJobsList.map(job => job.id),
+          delay: 0 // 지연 시간 제거
+      });
   });
 }
 
@@ -2524,11 +2521,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const currentPath = window.location.pathname;
   if (currentPath === '/') {
       if (checkLogin()) {
-          window.location.href = 'main.html';
+          window.location.href = 'index.html';
       } else {
           window.location.href = 'login.html';
       }
-      logAction('rootRedirect', { to: checkLogin() ? 'main.html' : 'login.html' });
+      logAction('rootRedirect', { to: checkLogin() ? 'index.html' : 'login.html' });
       return;
   }
 
@@ -2580,7 +2577,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               searchInputMain.addEventListener('input', (e) => {
                   searchJobs(e.target.value, document.getElementById('recommended-job-list'));
                   if (typeof showRecommendedJobsModal === 'function') {
-                      setTimeout(showRecommendedJobsModal, 5000);
+                      showRecommendedJobsModal(); // 지연 시간 제거
                   } else {
                       console.error('showRecommendedJobsModal 함수가 정의되지 않았습니다.');
                       logAction('error', { message: 'showRecommendedJobsModal 함수가 정의되지 않음' });
@@ -2594,7 +2591,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               heroSearchBtn.addEventListener('click', () => {
                   searchJobs(heroSearchInput.value, document.getElementById('recommended-job-list'));
                   if (typeof showRecommendedJobsModal === 'function') {
-                      setTimeout(showRecommendedJobsModal, 5000);
+                      showRecommendedJobsModal(); // 지연 시간 제거
                   } else {
                       console.error('showRecommendedJobsModal 함수가 정의되지 않았습니다.');
                       logAction('error', { message: 'showRecommendedJobsModal 함수가 정의되지 않음' });
@@ -2610,7 +2607,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const recommendedModal = document.getElementById('preferred-recommended-modal');
           if (recommendedModal) {
               if (typeof showRecommendedJobsModal === 'function') {
-                  setTimeout(showRecommendedJobsModal, 5000);
+                  showRecommendedJobsModal(); // 지연 시간 제거
               } else {
                   console.error('showRecommendedJobsModal 함수가 정의되지 않았습니다.');
                   logAction('error', { message: 'showRecommendedJobsModal 함수가 정의되지 않음' });
@@ -2618,7 +2615,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
 
           if (typeof showRecommendedJobsModal === 'function') {
-              showRecommendedJobsModal();
+              showRecommendedJobsModal(); // 지연 시간 제거
           } else {
               console.error('showRecommendedJobsModal 함수가 정의되지 않았습니다.');
               logAction('error', { message: 'showRecommendedJobsModal 함수가 정의되지 않음' });
@@ -2630,7 +2627,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (popularJobList) {
               popularJobList.innerHTML = '<p class="loading-message">인기 공고 로드 중...</p>';
               
-              // jobs 데이터가 로드되었는지 확인
               if (!jobs || jobs.length === 0) {
                   console.error('인기 공고 로드 실패: jobs 데이터가 없습니다.');
                   popularJobList.innerHTML = '<p class="error-message">인기 공고를 로드할 수 없습니다.</p>';
@@ -2653,7 +2649,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                       .filter(job => job);
               }
 
-              // 클릭 데이터가 없거나 유효한 공고가 없으면 기본적으로 최신 공고 표시
               if (popularJobs.length === 0) {
                   popularJobs = jobs.slice(0, 3);
                   console.log('인기 공고: 클릭 데이터 없음, 기본 공고 표시');
@@ -2698,12 +2693,11 @@ document.addEventListener('DOMContentLoaded', async () => {
               logAction('viewPopularJobs', { jobCount: popularJobs.length, jobIds: popularJobs.map(job => job.id) });
           }
 
-          // 직군별 카테고리 카드 클릭 이벤트 추가
           const categoryCards = document.querySelectorAll('.category-card');
           categoryCards.forEach(card => {
               card.addEventListener('click', () => {
                   const category = card.dataset.category;
-                  window.location.href = `index.html?category=${encodeURIComponent(category)}`;
+                  window.location.href = `jobs.html?category=${encodeURIComponent(category)}`;
                   logAction('clickCategoryCard', { category });
               });
           });
@@ -2724,7 +2718,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   displayJobs(selectedCategory);
                   displayRecommendations(selectedCategory);
                   if (typeof showRecommendedJobsModal === 'function') {
-                      setTimeout(showRecommendedJobsModal, 5000); // showNotification -> showRecommendedJobsModal
+                      showRecommendedJobsModal(); // 지연 시간 제거
                   } else {
                       console.error('showRecommendedJobsModal 함수가 정의되지 않았습니다.');
                       logAction('error', { message: 'showRecommendedJobsModal 함수가 정의되지 않음' });
@@ -2732,18 +2726,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                   logAction('changeCategory', { selectedCategory });
               }
 
-              // URL 파라미터에서 카테고리 선택
               const urlParams = new URLSearchParams(window.location.search);
               const category = urlParams.get('category');
-              if (category) {
-                  categorySelect.value = category;
-                  displayJobs(category);
-                  displayRecommendations(category);
+              console.log('URL Parameter - Raw Category:', category);
+              const decodedCategory = category ? decodeURIComponent(category) : null;
+              console.log('URL Parameter - Decoded Category:', decodedCategory);
+
+              if (decodedCategory && [...new Set(jobs.map(job => job.category))].includes(decodedCategory)) {
+                  categorySelect.value = decodedCategory;
+                  console.log('Setting categorySelect value to:', decodedCategory);
+                  displayJobs(decodedCategory);
+                  displayRecommendations(decodedCategory);
               } else {
+                  console.log('No valid category found, displaying all jobs');
+                  categorySelect.value = 'all';
                   displayJobs('all');
                   displayRecommendations('all');
               }
           } else {
+              console.log('No category select found, displaying all jobs');
               displayJobs('all');
               displayRecommendations('all');
           }
@@ -2756,10 +2757,10 @@ document.addEventListener('DOMContentLoaded', async () => {
               });
           }
 
-          const recommendedModal = document.getElementById('preferred-recommended-modal'); // recommended-modal -> preferred-recommended-modal
+          const recommendedModal = document.getElementById('preferred-recommended-modal');
           if (recommendedModal) {
               if (typeof showRecommendedJobsModal === 'function') {
-                  setTimeout(showRecommendedJobsModal, 10000); // showRecommendedJob -> showRecommendedJobsModal
+                  showRecommendedJobsModal(); // 지연 시간 제거
               } else {
                   console.error('showRecommendedJobsModal 함수가 정의되지 않았습니다.');
                   logAction('error', { message: 'showRecommendedJobsModal 함수가 정의되지 않음' });

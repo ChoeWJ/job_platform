@@ -16,7 +16,7 @@ body {
     color: #2c3e50;
 }
 
-/* main.html 페이지 식별 */
+/* jobs.html 페이지 식별 */
 body.main-page nav {
     justify-content: flex-end;
 }
@@ -297,7 +297,7 @@ section h2 .icon {
     background: #fff;
     border-radius: 10px;
     padding: 15px;
-    width: 220px;
+    width: 300px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-sizing: border-box;
@@ -631,7 +631,7 @@ footer {
     padding: 20px;
     border-radius: 10px;
     width: 90%;
-    max-width: 400px; /* 최대 너비 축소 (기존 500px에서 400px로 변경) */
+    max-width: 700px; /* 최대 너비 축소 (기존 500px에서 400px로 변경) */
     max-height: 70vh; /* 최대 높이 설정 */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-50px) scale(0.95);
@@ -1981,4 +1981,146 @@ footer {
     gap: 20px;
     overflow-x: auto; /* 가로 스크롤 가능 */
     padding-bottom: 10px;
+}
+
+
+
+/* 추천 공고 모달 */
+#preferred-recommended-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+#preferred-recommended-modal.show {
+    display: block;
+}
+
+#preferred-recommended-modal .modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#preferred-recommended-modal .close-preferred-recommended {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #7f8c8d;
+}
+
+#preferred-recommended-modal h3 {
+    margin: 0 0 15px;
+    font-size: 20px;
+    color: #2c3e50;
+}
+
+/* 모달 내부 공고 두 줄씩 표시 */
+#preferred-recommended-jobs {
+    display: flex;
+    flex-wrap: wrap; /* 줄 바꿈 허용 */
+    gap: 20px;
+    justify-content: space-between; /* 카드 간 간격 균등 분배 */
+}
+
+#preferred-recommended-jobs .job-card {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    width: calc(50% - 10px); /* 한 줄에 2개씩 표시 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+    min-height: 180px;
+}
+
+#preferred-recommended-jobs .job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#preferred-recommended-jobs .job-card h3 {
+    font-size: 16px;
+    margin: 0 0 8px;
+    color: #2c3e50;
+}
+
+#preferred-recommended-jobs .job-card p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 5px 0;
+}
+
+#preferred-recommended-jobs .job-card p.highlight {
+    color: #2980b9;
+    font-weight: bold;
+}
+
+#preferred-recommended-jobs .job-card .detail-button {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+    margin-top: 8px;
+}
+
+#preferred-recommended-jobs .job-card .detail-button:hover {
+    background: #2980b9;
+}
+
+#preferred-recommended-jobs .job-card .feedback-like,
+#preferred-recommended-jobs .job-card .feedback-dislike {
+    padding: 5px 10px;
+    margin: 5px 5px 0 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#preferred-recommended-jobs .job-card .feedback-like {
+    background: #e0f7fa;
+    color: #00796b;
+}
+
+#preferred-recommended-jobs .job-card .feedback-dislike {
+    background: #ffebee;
+    color: #c62828;
+}
+
+#preferred-recommended-jobs .job-card .feedback-like.animate-like,
+#preferred-recommended-jobs .job-card .feedback-dislike.animate-dislike {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+    #preferred-recommended-jobs .job-card {
+        width: 100%; /* 작은 화면에서는 한 줄에 하나씩 */
+    }
 }

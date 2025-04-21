@@ -6,54 +6,53 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>직무 상세 - 채용 플랫폼</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <title>공고 목록 - 채용 플랫폼</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="main-page">
     <div class="wrapper">
         <header>
             <a href="index.html"><h1>채용 플랫폼</h1></a>
         </header>
-            <nav>
-                <div class="nav-left">
-                    <a href="profile.html" class="detail-button profile-btn">프로필</a>
+        <nav>
+            <div class="nav-left">
+                <a href="profile.html" class="detail-button profile-btn">프로필</a>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="detail-button job-list-btn">채용 공고 보기</a>
+            </div>
+            <div class="nav-right">
+                <div id="auth-button-container"></div>
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="공고 검색">
+                    <button id="advanced-search-btn" class="detail-button">상세 검색</button>
                 </div>
-                <div class="nav-center">extton job-list-btn">채용 공고 보기</a>
-                </div>
-                <div class="nav-right">
-                    <div id="auth-button-container"></div>
-                    <div class="search-container">
-                        <input type="text" id="search-input-main" class="search-input" placeholder="공고 검색">
-                        <button id="advanced-search-btn-main" class="detail-button">상세 검색</button>
-                    </div>
-                </div>
-            </nav>
-        <div id="job-detail">
-            <div class="company-header" id="company-image"></div>
-            <div class="detail-card">
-                <h2 id="detail-title"></h2>
-                <div class="detail-info">
-                    <p id="detail-company"></p>
-                    <p id="detail-salary"></p>
-                    <p id="detail-remote"></p>
-                </div>
-                <div class="detail-section">
-                    <h3>직무 설명</h3>
-                    <p id="detail-description"></p>
-                </div>
-                <div class="detail-section">
-                    <h3>경력 요건</h3>
-                    <p id="detail-experience"></p>
-                </div>
-                <div class="detail-section">
-                    <h3>자격 요건</h3>
-                    <ul id="detail-requirements"></ul>
-                </div>
-                <button class="favorite-button detail-button">즐겨찾기 추가</button>
-                <a href="#" class="apply-button">지금 지원하기</a>
+            </div>
+        </nav>
+        <div class="content-area">
+            <main id="job-listings">
+                <select id="category-select"></select>
+                <input type="text" id="search-input" class="search-input" placeholder="공고 검색...">
+                <div class="job-grid"></div>
+            </main>
+            <aside id="recommendations">
+                <h3>추천 공고</h3>
+                <div id="recommendation-list"></div>
+            </aside>
+        </div>
+        <section id="insights">
+            <h2>플랫폼 인사이트</h2>
+            <p>우리 플랫폼에서 소프트웨어 개발자 전환율 70% 달성!</p>
+        </section>
+        <!-- 추천 공고 모달 -->
+        <div id="preferred-recommended-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-preferred-recommended">×</span>
+                <h3>추천 공고</h3>
+                <div id="preferred-recommended-jobs"></div>
             </div>
         </div>
+        <!-- 상세 검색 모달 -->
         <div id="advanced-search-modal" class="modal">
             <div class="modal-content">
                 <span class="close-advanced-search">×</span>
@@ -86,7 +85,6 @@
         </div>
         <footer>
             <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
-            <a href="analytics.html" class="admin-link">관리자 대시보드</a>
         </footer>
     </div>
     <script type="module" src="js/script.js"></script>
