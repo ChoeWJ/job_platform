@@ -17,98 +17,140 @@
             <a href="main.html"><h1>관리자 대시보드</h1></a>
         </header>
         <nav>
-            <!-- "홈으로 돌아가기" 버튼 제거 -->
+            <div class="nav-right">
+                <div id="auth-button-container"></div>
+            </div>
         </nav>
         <section id="analytics">
-            <h2>AARRR 지표 (최근 30일)</h2>
-            <canvas id="aarrr-chart" width="400" height="200"></canvas>
-          
-            <h2>공고별 클릭 횟수</h2>
-            <table id="job-clicks-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>공고 제목</th>
-                  <th>회사</th>
-                  <th>클릭 횟수</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          
-            <h2>공고별 조회수 랭킹 (상위 5개)</h2>
-            <canvas id="job-clicks-ranking-chart" width="400" height="200"></canvas>
-          
-            <h2>직군별 랭킹 (상위 5개)</h2>
-            <canvas id="category-ranking-chart" width="400" height="200"></canvas>
-          
-            <h2>페이지 조회수 (PV)</h2>
-            <canvas id="pv-chart" width="400" height="200"></canvas>
-            <table id="pv-table">
-              <thead>
-                <tr>
-                  <th>페이지</th>
-                  <th>조회수</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          
-            <h2>MAU/DAU</h2>
-            <canvas id="mau-dau-chart" width="400" height="200"></canvas>
-          
-            <h2>직군별 클릭 수</h2>
-            <table id="click-table">
-              <thead>
-                <tr>
-                  <th>직군</th>
-                  <th>클릭 수</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          
-            <h2>회사별 공고 수</h2>
-            <table id="company-jobs-table">
-              <thead>
-                <tr>
-                  <th>회사</th>
-                  <th>공고 수</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          
-            <h2>사용자 관리</h2>
-            <table id="user-table">
-              <thead>
-                <tr>
-                  <th>이메일</th>
-                  <th>선호 직군</th>
-                  <th>이력서</th>
-                  <th>작업</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          
-            <h2>공고 관리</h2>
-            <table id="job-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>제목</th>
-                  <th>직군</th>
-                  <th>회사</th>
-                  <th>작업</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </section>
+            <!-- 탭 UI -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="user-metrics">사용자 지표</button>
+                <button class="tab-button" data-tab="job-metrics">공고 관리</button>
+            </div>
+            <!-- 사용자 지표 탭 -->
+            <div id="user-metrics" class="tab-content active">
+                <div class="dashboard-grid">
+                    <!-- 페이지 조회수 (PV) -->
+                    <div class="chart-container">
+                        <h2>페이지 조회수 (PV)</h2>
+                        <canvas id="pv-chart" width="400" height="200"></canvas>
+                        <table id="pv-table">
+                            <thead>
+                                <tr>
+                                    <th>페이지</th>
+                                    <th>조회수</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- MAU/DAU -->
+                    <div class="chart-container">
+                        <h2>MAU/DAU</h2>
+                        <canvas id="mau-dau-chart" width="400" height="200"></canvas>
+                    </div>
+                    <!-- 사용자 유입 경로 -->
+                    <div class="table-container">
+                        <h2>사용자 유입 경로</h2>
+                        <table id="user-acquisition-table">
+                            <thead>
+                                <tr>
+                                    <th>이메일</th>
+                                    <th>최초 방문 페이지</th>
+                                    <th>최초 방문 시간</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- 리텐션율 -->
+                    <div class="chart-container">
+                        <h2>7일 리텐션율</h2>
+                        <canvas id="retention-chart" width="400" height="200"></canvas>
+                    </div>
+                    <!-- 직군별 클릭 수 -->
+                    <div class="table-container">
+                        <h2>직군별 클릭 수</h2>
+                        <table id="click-table">
+                            <thead>
+                                <tr>
+                                    <th>직군</th>
+                                    <th>클릭 수</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- 사용자 관리 -->
+                    <div class="table-container full-width">
+                        <h2>사용자 관리</h2>
+                        <table id="user-table">
+                            <thead>
+                                <tr>
+                                    <th>이메일</th>
+                                    <th>선호 직군</th>
+                                    <th>이력서</th>
+                                    <th>작업</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 공고 관리 탭 -->
+            <div id="job-metrics" class="tab-content">
+                <div class="dashboard-grid">
+                    <!-- 회사별 공고 수 -->
+                    <div class="table-container">
+                        <h2>회사별 공고 수</h2>
+                        <table id="company-jobs-table">
+                            <thead>
+                                <tr>
+                                    <th>회사</th>
+                                    <th>공고 수</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- 공고별 클릭 횟수 -->
+                    <div class="table-container full-width">
+                        <h2>공고별 클릭 횟수</h2>
+                        <table id="job-clicks-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>공고 제목</th>
+                                    <th>회사</th>
+                                    <th>클릭 횟수</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- 공고 관리 -->
+                    <div class="table-container full-width">
+                        <h2>공고 관리</h2>
+                        <table id="job-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>제목</th>
+                                    <th>직군</th>
+                                    <th>회사</th>
+                                    <th>작업</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
         <div id="auth-modal" class="modal">
             <div class="modal-content">
-                <h3>관리자 인증</h3>
+                <h2>관리자 인증</h2>
                 <input type="password" id="admin-password" placeholder="관리자 비밀번호" class="search-input">
                 <button id="auth-submit" class="detail-button">확인</button>
                 <p id="auth-error" style="display: none; color: red;">비밀번호가 잘못되었습니다.</p>

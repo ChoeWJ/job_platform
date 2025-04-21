@@ -1,122 +1,148 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>채용 플랫폼 - 홈</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>채용 플랫폼 - 홈</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-  <div class="wrapper">
-    <header class="hero-header">
-      <div class="hero-content">
-        <a href="main.html"><h1>채용 플랫폼</h1></a>
-        <p>당신의 꿈을 위한 첫걸음, 지금 바로 시작하세요!</p>
-      </div>
-    </header>
-    <nav>
-      <div class="nav-left">
-        <a href="profile.html" class="detail-button profile-btn">프로필</a>
-      </div>
-      <div class="nav-center">
-        <a href="index.html" class="detail-button job-list-btn">직군별 공고 보기</a>
-      </div>
-      <div class="nav-right">
-        <div id="auth-button-container"></div>
-        <div class="search-container">
-          <input type="text" id="search-input-main" class="search-input" placeholder="공고 검색">
-          <button id="advanced-search-btn-main" class="detail-button">상세 검색</button>
+<body class="main-page">
+    <div class="wrapper">
+        <header class="hero-header">
+          <div class="hero-content">
+              <a href="main.html"><h1>채용 플랫폼</h1></a>
+              <p>당신의 커리어를 위한 최적의 기회, 지금 찾아보세요!</p>
+              <div class="hero-search">
+                  <input type="text" id="hero-search-input" placeholder="꿈의 직장을 검색하세요..." class="search-input">
+                  <button id="hero-search-btn" class="detail-button">검색</button>
+              </div>
+          </div>
+      </header>
+        <nav>
+            <div class="nav-left">
+                <a href="profile.html" class="detail-button profile-btn">프로필</a>
+            </div>
+            <div class="nav-center">
+                <a href="index.html" class="detail-button job-list-btn">채용 공고 보기</a>
+            </div>
+            <div class="nav-right">
+                <div id="auth-button-container"></div>
+                <div class="search-container">
+                    <input type="text" id="search-input-main" class="search-input" placeholder="공고 검색">
+                    <button id="advanced-search-btn-main" class="detail-button">상세 검색</button>
+                </div>
+            </div>
+        </nav>
+        <section id="category-highlights">
+            <h2>인기 직군 탐색</h2>
+            <div class="category-grid">
+                <div class="category-card" data-category="소프트웨어 개발">
+                    <img src="images/software_dev.jpg" alt="소프트웨어 개발">
+                    <h3>소프트웨어 개발</h3>
+                </div>
+                <div class="category-card" data-category="데이터 과학 및 분석">
+                    <img src="images/data_science.jpg" alt="데이터 과학 및 분석">
+                    <h3>데이터 과학 및 분석</h3>
+                </div>
+                <div class="category-card" data-category="디자인">
+                    <img src="images/design.jpg" alt="디자인">
+                    <h3>디자인</h3>
+                </div>
+                <div class="category-card" data-category="마케팅 및 광고">
+                    <img src="images/marketing.jpg" alt="마케팅 및 광고">
+                    <h3>마케팅 및 광고</h3>
+                </div>
+            </div>
+        </section>
+        <div id="preferred-recommended-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-preferred-recommended">×</span>
+                <h3>선호 직군 추천 공고</h3>
+                <div id="preferred-recommended-jobs"></div>
+            </div>
         </div>
-      </div>
-    </nav>
-    <div id="preferred-recommended-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-preferred-recommended">×</span>
-        <h3>선호 직군 추천 공고</h3>
-        <div id="preferred-recommended-jobs"></div>
-      </div>
+        <div id="recommended-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-recommended">×</span>
+                <h3>추천 공고</h3>
+                <div id="recommended-job"></div>
+            </div>
+        </div>
+        <section id="recommended-jobs">
+            <h2><span class="icon">📋</span> 당신을 위한 추천 공고</h2>
+            <div id="recommended-job-list" class="job-grid"></div>
+        </section>
+        <section id="advertisement">
+            <div class="ad-banner">
+                <img src="images/ad_banner.png" alt="코드잇 광고 배너" class="ad-image">
+                <div class="ad-content">
+                    <h3>코드잇과 함께 커리어를 시작하세요!</h3>
+                    <p>프로그래밍부터 데이터 분석까지, 당신의 꿈을 현실로!</p>
+                    <a href="https://www.codeit.kr" target="_blank" class="detail-button">지금 확인하기</a>
+                </div>
+            </div>
+        </section>        
+        <section id="popular-jobs">
+            <h2><span class="icon">🔥</span> 인기 공고</h2>
+            <div id="popular-job-list" class="job-grid"></div>
+        </section>
+        <section id="real-time-news">
+            <h2><span class="icon">📰</span> 실시간 채용 및 기업 뉴스</h2>
+            <div id="news-list" class="news-grid"></div>
+        </section>
+        <section id="job-tips">
+            <h2><span class="icon">💡</span> 채용 팁</h2>
+            <div id="job-tips-content" class="tips-grid">
+                <div class="tip-card">
+                    <h3>이력서 작성 팁</h3>
+                    <p>명확하고 간결하게 작성하세요. 기술 스택과 주요 성과를 강조하면 좋습니다.</p>
+                </div>
+                <div class="tip-card">
+                    <h3>인터뷰 준비 팁</h3>
+                    <p>회사와 직무에 대해 충분히 조사하고, 예상 질문에 대한 답변을 준비하세요.</p>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
+            <a href="analytics.html" class="admin-link">관리자 대시보드</a>
+        </footer>
     </div>
-    <div id="recommended-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-recommended">×</span>
-        <h3>추천 공고</h3>
-        <div id="recommended-job"></div>
-      </div>
+    
+    <div id="advanced-search-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-advanced-search">×</span>
+            <h3>상세 검색</h3>
+            <form id="advanced-search-form">
+                <label><input type="checkbox" id="salary-disclosed"> 연봉 공개 여부</label>
+                <input type="number" id="salary-min" placeholder="최소 연봉 (만원)" class="search-input">
+                <input type="number" id="salary-max" placeholder="최대 연봉 (만원)" class="search-input">
+                <select id="remote-filter">
+                    <option value="all">원격 근무 전체</option>
+                    <option value="true">원격 근무 가능</option>
+                    <option value="false">원격 근무 불가능</option>
+                </select>
+                <select id="category-filter">
+                    <option value="all">전체 직군</option>
+                    <option value="소프트웨어 개발">소프트웨어 개발</option>
+                    <option value="HR 및 채용">HR 및 채용</option>
+                    <option value="마케팅 및 광고">마케팅 및 광고</option>
+                    <option value="세일즈">세일즈</option>
+                    <option value="재무 및 회계">재무 및 회계</option>
+                    <option value="고객 서비스">고객 서비스</option>
+                    <option value="프로젝트 관리">프로젝트 관리</option>
+                    <option value="데이터 과학 및 분석">데이터 과학 및 분석</option>
+                    <option value="디자인">디자인</option>
+                    <option value="운영">운영</option>
+                </select>
+                <button type="submit" class="detail-button">검색</button>
+            </form>
+        </div>
     </div>
-    <section id="recommended-jobs">
-      <h2><span class="icon">📋</span> 당신을 위한 추천 공고</h2>
-      <div id="recommended-job-list" class="job-grid"></div>
-    </section>
-    <section id="advertisement">
-      <div class="ad-banner">
-        <img src="https://images.unsplash.com/photo-1600585154347-1be297b7e7f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="코드잇 광고 배너" class="ad-image">
-        <div class="ad-content">
-          <h3>코드잇과 함께 커리어를 시작하세요!</h3>
-          <p>프로그래밍부터 데이터 분석까지, 당신의 꿈을 현실로!</p>
-          <a href="https://www.codeit.kr" target="_blank" class="detail-button">지금 확인하기</a>
-        </div>
-      </div>
-    </section>
-    <section id="popular-jobs">
-      <h2><span class="icon">🔥</span> 인기 공고</h2>
-      <div id="popular-job-list" class="job-grid"></div>
-    </section>
-    <section id="real-time-news">
-      <h2><span class="icon">📰</span> 실시간 채용 및 기업 뉴스</h2>
-      <div id="news-list" class="news-grid"></div>
-    </section>
-    <section id="job-tips">
-      <h2><span class="icon">💡</span> 채용 팁</h2>
-      <div id="job-tips-content" class="tips-grid">
-        <div class="tip-card">
-          <h3>이력서 작성 팁</h3>
-          <p>명확하고 간결하게 작성하세요. 기술 스택과 주요 성과를 강조하면 좋습니다.</p>
-        </div>
-        <div class="tip-card">
-          <h3>인터뷰 준비 팁</h3>
-          <p>회사와 직무에 대해 충분히 조사하고, 예상 질문에 대한 답변을 준비하세요.</p>
-        </div>
-      </div>
-    </section>
-    <footer>
-      <p>© 2025 채용 플랫폼. 모든 권리 보유.</p>
-      <a href="analytics.html" class="admin-link">관리자 대시보드</a>
-    </footer>
-  </div>
-  <div id="advanced-search-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-advanced-search">×</span>
-      <h3>상세 검색</h3>
-      <form id="advanced-search-form">
-        <label><input type="checkbox" id="salary-disclosed"> 연봉 공개 여부</label>
-        <input type="number" id="salary-min" placeholder="최소 연봉 (만원)" class="search-input">
-        <input type="number" id="salary-max" placeholder="최대 연봉 (만원)" class="search-input">
-        <select id="remote-filter">
-          <option value="all">원격 근무 전체</option>
-          <option value="true">원격 근무 가능</option>
-          <option value="false">원격 근무 불가능</option>
-        </select>
-        <select id="category-filter">
-          <option value="all">전체 직군</option>
-          <option value="소프트웨어 개발">소프트웨어 개발</option>
-          <option value="HR 및 채용">HR 및 채용</option>
-          <option value="마케팅 및 광고">마케팅 및 광고</option>
-          <option value="세일즈">세일즈</option>
-          <option value="재무 및 회계">재무 및 회계</option>
-          <option value="고객 서비스">고객 서비스</option>
-          <option value="프로젝트 관리">프로젝트 관리</option>
-          <option value="데이터 과학 및 분석">데이터 과학 및 분석</option>
-          <option value="디자인">디자인</option>
-          <option value="운영">운영</option>
-        </select>
-        <button type="submit" class="detail-button">검색</button>
-      </form>
-    </div>
-  </div>
-  <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/script.js"></script>
 </body>
 </html>
